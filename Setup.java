@@ -35,14 +35,14 @@ public class Setup {
         String command = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
-            statement = connection.createStatement();
-
             File sql = new File(SQL_PATH);
             if (!sql.exists()) {
                 System.out.println("No schema found.");
                 System.exit(0);
             }
+
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
+            statement = connection.createStatement();
 
             read = new Scanner(sql);
             read.useDelimiter(";");
