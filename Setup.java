@@ -1,4 +1,3 @@
-import java.nio.file.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,12 +11,15 @@ public class Setup {
     private static final String DB_PATH = "hotels.db";
 
     private static void initDB() throws IOException {
-        Path path = Paths.get(DB_PATH);
         try {
-            Files.createFile(path);
-        } catch (FileAlreadyExistsException ex) {
-            System.out.println("Database already exists.");
-            System.exit(0);
+            File db = new File(DB_PATH);
+            if (db.createNewFile())
+                System.out.println("Database created.");
+            else
+                System.out.println("Database already exists.");
+                System.exit(0);
+        } catch (Exception e) {
+            System.err.println(e);
         }
     }
 

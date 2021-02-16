@@ -4,7 +4,8 @@ CREATE TABLE HOTELS (
     , Address VARCHAR(30)
     , Image VARCHAR(10)
     , Accessibility INT
-    , Gym INT, Spa INT
+    , Gym INT
+    , Spa INT
     , PRIMARY KEY(name
 ));
 
