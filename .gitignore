@@ -1,0 +1,5 @@
+# Skip compiled class files
+*.class
+
+# Do not save modified database to allow tst queries
+*.db
