@@ -32,7 +32,7 @@ public class Setup {
         String command = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:hotels.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
             statement = connection.createStatement();
             read = new Scanner(new File(SQL_PATH));
             read.useDelimiter(";");
