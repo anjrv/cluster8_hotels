@@ -15,9 +15,10 @@ public class Setup {
             File db = new File(DB_PATH);
             if (db.createNewFile())
                 System.out.println("Database created.");
-            else
+            else {
                 System.out.println("Database already exists.");
                 System.exit(0);
+            }
         } catch (Exception e) {
             System.err.println(e);
         }
@@ -36,7 +37,14 @@ public class Setup {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
             statement = connection.createStatement();
-            read = new Scanner(new File(SQL_PATH));
+
+            File sql = new File(SQL_PATH);
+            if (!sql.exists()) {
+                System.out.println("No schema found.");
+                System.exit(0);
+            }
+
+            read = new Scanner(sql);
             read.useDelimiter(";");
 
             while (read.hasNext()) {
