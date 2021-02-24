@@ -35,7 +35,7 @@ public class Logic {
         return String[];
     }
 
-    public static Hotel[] getHotels( /* params */ ) {
+    public static Hotel[] getHotels(String[] params) {
         // try / catch miðað við parameters...
         // kallar á query með params
         // new Hotel[] miðað við String[] lengd
@@ -44,7 +44,7 @@ public class Logic {
         return Hotel[];
     }
 
-    public static Room[] getRooms( /* params */ ) {
+    public static Room[] getRooms(String[] params) {
         // try / catch miðað við parameters...
         // kallar á query með params
         // new Hotel[] miðað við String[] lengd
@@ -53,7 +53,7 @@ public class Logic {
         return Room[];
     }
 
-    public static Reservation[] getReservations( /* params */ ) {
+    public static Reservation[] getReservations(String[] params) {
         // try / catch miðað við parameters...
         // kallar á query með params
         // new Hotel[] miðað við String[] lengd
@@ -63,7 +63,7 @@ public class Logic {
 
     }
 
-    public static Review[] getReviews( /* params */ ) {
+    public static Review[] getReviews(String[] params) {
         // try / catch miðað við parameters...
         // kallar á query með params
         // new Hotel[] miðað við String[] lengd
@@ -72,11 +72,11 @@ public class Logic {
         return Review[];
     }
 
-    public static void insertReservation() {
+    public static void insertReservation(Reservation r) {
 
     }
 
-    public static void insertReview() {
+    public static void insertReview(Review r) {
 
     }
 }
