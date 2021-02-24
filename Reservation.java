@@ -11,7 +11,25 @@ public class Reservation {
     private Review review;
 
     public Reservation() {
-        // ...
+        // startDate
+        // endDate
+        // contact
+        // hname
+        // rnumber
+    }
+
+    public Reservation(boolean p) {
+        // startDate
+        // endDate
+        // contact
+        // hname
+        // rnumber
+        // paid
+    }
+
+    private void initialize() {
+        // reservationID
+        // creationDate
     }
 
     public String getResID() {
