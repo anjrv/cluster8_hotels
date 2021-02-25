@@ -10,12 +10,13 @@ public class Reservation {
     private int rnumber;
     private Review review;
 
-    public Reservation() {
-        // startDate
-        // endDate
-        // contact
+    public Reservation(long s, long e, String c, String hn, int rn) {
+        this.startDate = s;
+        this.endDate = e;
+        
         // hname
         // rnumber
+        initialize();
     }
 
     public Reservation(boolean p) {
@@ -25,6 +26,7 @@ public class Reservation {
         // hname
         // rnumber
         // paid
+        initialize();
     }
 
     private void initialize() {
