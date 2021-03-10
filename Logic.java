@@ -24,6 +24,12 @@ public class Logic {
 
     public ArrayList<Hotel> getHotels(String[] params) throws ClassNotFoundException {
         String sql = "SELECT name, region, address, image, accessibility, gym, spa FROM hotels";
+        
+        for (int i = 0; i < params.length; i++) {
+            sql += "WHERE " + params[i];
+        }
+        sql += "FROM hotels";
+
         ArrayList<Hotel> hotels = new ArrayList<Hotel>();
 
         try (Connection connection = this.query();
