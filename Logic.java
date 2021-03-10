@@ -76,11 +76,11 @@ public class Logic {
      * 
      * return Review[]; }
      * 
-     * public static void insertReservation(Reservation r) {
+     * public static void setReservation(Reservation r) {
      * 
      * }
      * 
-     * public static void insertReview(Review r) {
+     * public static void setReview(Review r) {
      * 
      * }
      */
