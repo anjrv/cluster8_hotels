@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
 import hotels.Logic;
 import hotels.Hotel;
 
@@ -27,7 +28,18 @@ public class Demo {
      */
     public static void main(String[] args) {
         Logic bn = new Logic();
-        String[] params = { "filler" }; // Parameter handling not yet finished
+
+        Hashtable<String, String> params = new Hashtable<String, String>();
+        // Current format of schema allows queries in this format:
+        // Name VARCHAR(15) NOT NULL
+        // Region INT NOT NULL
+        // Address VARCHAR(30)
+        // Image VARCHAR(10)
+        // Accessibility INT, 1 or 0
+        // Gym INT, 1 or 0
+        // Spa INT, 1 or 0
+
+        params.put("Region", "1"); // Query for region 1 only.
 
         try {
             ArrayList<Hotel> hotels = bn.getHotels(params);

@@ -3,11 +3,13 @@ package hotels;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetFactory;
 import javax.sql.rowset.RowSetProvider;
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * Authors:
@@ -72,16 +74,21 @@ class QueryEngine {
      * @return CachedRowSet cached rows from the result of the performed query
      * @throws ClassNotFoundException
      */
-    static CachedRowSet query(String sql) throws ClassNotFoundException {
+    static CachedRowSet query(String sql, ArrayList<String> vals) throws ClassNotFoundException {
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         CachedRowSet res = null;
         ResultSet rs = null;
 
         try {
             connection = connect();
-            statement = connection.createStatement();
-            rs = statement.executeQuery(sql);
+
+            statement = connection.prepareStatement(sql);
+            for (int i = 0; i < vals.size(); i++) {
+                statement.setString(i+1,vals.get(i));
+            }
+            rs = statement.executeQuery();
+
             RowSetFactory factory = RowSetProvider.newFactory();
             res = factory.createCachedRowSet();
             res.populate(rs);
