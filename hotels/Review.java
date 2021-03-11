@@ -1,3 +1,12 @@
+package hotels;
+
+/**
+ * Authors:
+ * Einar Jónsson
+ * Eydís Sylvía Einarsdóttir
+ * Jaan Jaerving
+ * Snorri Steinn Stefánsson Thors
+ */
 public class Review {
     private final int grade;
     private final int rnumber;

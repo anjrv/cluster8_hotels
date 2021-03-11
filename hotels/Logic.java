@@ -4,7 +4,22 @@ import javax.sql.rowset.CachedRowSet;
 import java.util.ArrayList;
 import java.sql.SQLException;
 
+/**
+ * Authors:
+ * Einar Jónsson
+ * Eydís Sylvía Einarsdóttir
+ * Jaan Jaerving
+ * Snorri Steinn Stefánsson Thors
+ */
 public class Logic {
+
+    /**
+     * Creates an ArrayList of hotels based on the current state
+     * of the database and the parameters provided by the argument.
+     * 
+     * @param params a String array of parameters to be added to the query
+     * @return an ArrayList of hotel objects that match the parameters
+     */
     public ArrayList<Hotel> getHotels(String[] params)  {
         ArrayList<Hotel> hotels = new ArrayList<Hotel>();
         String sql = "SELECT name, region, address, image, accessibility, gym, spa FROM hotels";

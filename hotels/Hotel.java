@@ -2,6 +2,13 @@ package hotels;
 
 import java.util.ArrayList;
 
+/**
+ * Authors:
+ * Einar Jónsson
+ * Eydís Sylvía Einarsdóttir
+ * Jaan Jaerving
+ * Snorri Steinn Stefánsson Thors
+ */
 public class Hotel {
     private String name;
     private String address;
@@ -11,7 +18,7 @@ public class Hotel {
     private boolean gym;
     private boolean spa;
     private ArrayList<Room> rooms;
-
+    
     public Hotel(String n, String a, String img, int r, boolean acc, boolean gym, boolean spa, ArrayList<Room> rms) {
         this.name = n;
         this.address = a;

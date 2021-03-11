@@ -2,6 +2,13 @@ package hotels;
 
 //import java.util.ArrayList;
 
+/**
+ * Authors:
+ * Einar Jónsson
+ * Eydís Sylvía Einarsdóttir
+ * Jaan Jaerving
+ * Snorri Steinn Stefánsson Thors
+ */
 public class Room {
     private int rnumber;
     private String hname;

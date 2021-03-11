@@ -8,10 +8,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Authors:
+ * Einar Jónsson
+ * Eydís Sylvía Einarsdóttir
+ * Jaan Jaerving
+ * Snorri Steinn Stefánsson Thors
+ */
 public class Setup {
     private static final String SQL_PATH = "hotels/schema.sql";
     private static final String DB_PATH = "hotels/hotels.db";
 
+    /**
+     * Helper function that creates
+     * a database file if it does not
+     * yet exist.
+     * 
+     * @throws IOException
+     */
     private static void initDB() throws IOException {
         try {
             File db = new File(DB_PATH);
@@ -26,6 +40,20 @@ public class Setup {
         }
     }
 
+    /**
+     * Will attempt to create and populate
+     * a database in the current package
+     * directory if it does not already exist.
+     * 
+     * In order to not overwrite information
+     * that already exists the program will exit
+     * if any existing database or tables
+     * are detected.
+     * 
+     * @param args
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         initDB();
 

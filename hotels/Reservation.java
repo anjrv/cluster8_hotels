@@ -1,3 +1,12 @@
+package hotels;
+
+/**
+ * Authors:
+ * Einar Jónsson
+ * Eydís Sylvía Einarsdóttir
+ * Jaan Jaerving
+ * Snorri Steinn Stefánsson Thors
+ */
 public class Reservation {
     private String reservationID;
     private long creationDate;
