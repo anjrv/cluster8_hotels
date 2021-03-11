@@ -30,7 +30,7 @@ public class Logic {
         // sql += "FROM hotels";
 
         try {
-            CachedRowSet crs = QueryEngine.queryHotels(sql);
+            CachedRowSet crs = QueryEngine.query(sql);
             while (crs.next()) {
                 hotels.add(new Hotel(crs.getString("name")
                                     ,crs.getString("address")

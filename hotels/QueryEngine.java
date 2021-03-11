@@ -64,7 +64,7 @@ class QueryEngine {
     }
 
     /**
-     * Queries the database for hotels as per the SQL query parameters
+     * Queries the database according to the SQL query parameters
      * returns a set of cached row results that can be worked with
      * without needing to have an open database connection.
      * 
@@ -72,7 +72,7 @@ class QueryEngine {
      * @return CachedRowSet cached rows from the result of the performed query
      * @throws ClassNotFoundException
      */
-    static CachedRowSet queryHotels(String sql) throws ClassNotFoundException {
+    static CachedRowSet query(String sql) throws ClassNotFoundException {
         Connection connection = null;
         Statement statement = null;
         CachedRowSet res = null;
@@ -93,15 +93,6 @@ class QueryEngine {
         return res;
     }
 
-    /*
-     * static CachedRowSet queryRooms(String sql) { }
-     * 
-     * static CachedRowSet queryReservations(String sql) { }
-     * 
-     * static CachedRowSet] queryReviews(String sql) { }
-     * 
-     * static void insertReservation(String sql) { }
-     * 
-     * static void insertReview(String sql) { }
-     */
+    // TODO: Similar generic for insert and update statements
+    // static void update(String sql) throws ClassNotFoundException {  }
 }
