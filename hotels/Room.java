@@ -1,4 +1,6 @@
-// import java.util.ArrayList;
+package hotels;
+
+//import java.util.ArrayList;
 
 public class Room {
     private int rnumber;
@@ -9,7 +11,7 @@ public class Room {
     private int children;
     private boolean wifi;
     private boolean breakfast;
-    private Reservation[] reservations; // Change to a list type
+    //private ArrayList<Reservation> reservations; // list types
 
     public Room() {
         // ...
@@ -21,6 +23,10 @@ public class Room {
 
     public String hname() {
         return hname;
+    }
+
+    public int price() {
+        return price;
     }
 
     public int getBeds() {
@@ -43,7 +49,6 @@ public class Room {
         return breakfast;
     }
 
-    public void addReservation(Reservation r) {
-        // append
-    }
+    //public void addReservation(Reservation r) {
+    //}
 }

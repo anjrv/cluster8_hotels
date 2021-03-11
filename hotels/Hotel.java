@@ -1,4 +1,6 @@
-// import java.util.ArrayList;
+package hotels;
+
+import java.util.ArrayList;
 
 public class Hotel {
     private String name;
@@ -8,9 +10,9 @@ public class Hotel {
     private boolean accessibility;
     private boolean gym;
     private boolean spa;
-    private Room[] rooms;
+    private ArrayList<Room> rooms;
 
-    public Hotel(String n, String a, String img, int r, boolean acc, boolean gym, boolean spa, Room[] rms) {
+    public Hotel(String n, String a, String img, int r, boolean acc, boolean gym, boolean spa, ArrayList<Room> rms) {
         this.name = n;
         this.address = a;
         this.image = img;
@@ -49,7 +51,7 @@ public class Hotel {
         return spa;
     }
 
-    public Room[] getRooms() {
+    public ArrayList<Room> getRooms() {
         return rooms;
     }
 }

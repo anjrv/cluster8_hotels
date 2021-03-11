@@ -1,3 +1,5 @@
+package hotels;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,8 +9,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Setup {
-    private static final String SQL_PATH = "schema.sql";
-    private static final String DB_PATH = "hotels.db";
+    private static final String SQL_PATH = "hotels/schema.sql";
+    private static final String DB_PATH = "hotels/hotels.db";
 
     private static void initDB() throws IOException {
         try {
