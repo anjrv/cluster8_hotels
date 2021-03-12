@@ -13,10 +13,10 @@ import java.util.Set;
  * Stefánsson Thors
  */
 public class Logic {
-    private final String[] HOTEL_PARAMS = { "name" , "address", "region", "accessibility", "gym", "spa" };
-    private final String[] ROOM_PARAMS = {};
-    private final String[] RESERVATION_PARAMS = {};
-    private final String[] REVIEW_PARAMS = {};
+    private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
+    private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
+    // private final String[] RESERVATION_PARAMS = {};
+    private final String[] REVIEW_PARAMS = { "grade" };
 
     /**
      * @return a comprehensive list of valid parameters to getHotels
@@ -72,7 +72,6 @@ public class Logic {
      * @return an ArrayList of hotel objects that match the parameters
      */
     public ArrayList<Hotel> getHotels(Hashtable<String, String> params) {
-        // Prepare parameters
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(HOTEL_PARAMS, setOfParameters);
@@ -89,9 +88,11 @@ public class Logic {
         try {
             CachedRowSet crs = QueryEngine.query(sql, setOfValues);
             while (crs.next()) {
-                hotels.add(new Hotel(crs.getString("name"), crs.getString("address"), crs.getString("image"),
-                        crs.getInt("region"), crs.getBoolean("accessibility"), crs.getBoolean("gym"),
-                        crs.getBoolean("spa"), new ArrayList<Room>()));
+                hotels.add(new Hotel(
+                    crs.getString("name"), crs.getString("address"), crs.getString("image"),
+                    crs.getInt("region"), crs.getBoolean("accessibility"), crs.getBoolean("gym"),
+                    crs.getBoolean("spa"), new ArrayList<Room>() // Fetch available rooms, crosscheck on Rooms and Reservations
+                ));
             }
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
@@ -100,16 +101,14 @@ public class Logic {
         return hotels;
     }
 
-    /*
-     * public static ArrayList<Room> getRooms(Hashtable<String, String> params) { }
-     * 
-     * public static ArrayList<Reservation> getReservations(Hashtable<String,
-     * String> params) { }
-     * 
-     * public static Review[] getReviews(Hashtable<String, String> params) { }
-     * 
-     * public static void setReservation(Reservation r) { }
-     * 
-     * public static void setReview(Review r) { }
-     */
+    
+    // public static ArrayList<Room> getRooms(Hashtable<String, String> params) { }
+
+    // public static ArrayList<Reservation> getReservations(Hashtable<String, String> params) { }
+
+    // public static Review[] getReviews(Hashtable<String, String> params) { }
+
+    // public static void setReservation(Reservation r) { }
+
+    // public static void setReview(Review r) { }
 }
