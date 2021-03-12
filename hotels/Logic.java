@@ -102,13 +102,41 @@ public class Logic {
     }
 
     
-    // public static ArrayList<Room> getRooms(Hashtable<String, String> params) { }
+    public ArrayList<Room> getRooms(Hashtable<String, String> params) { 
+        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
+        Set<String> setOfParameters = params.keySet();
+        validateParams(ROOM_PARAMS, setOfParameters);
 
-    // public static ArrayList<Reservation> getReservations(Hashtable<String, String> params) { }
+        int i = 0;
+        String sql = "SELECT * FROM rooms";
+        for (String key : setOfParameters) {
+            sql += " WHERE " + key + " = ? ";
+            if(i != setOfParameters.size()) sql += i > 0 ? "AND" : "";
+            i++;
+        }
 
-    // public static Review[] getReviews(Hashtable<String, String> params) { }
+        ArrayList<Room> rooms = new ArrayList<Room>();
+        try {
+            CachedRowSet crs = QueryEngine.query(sql, setOfValues);
+            while (crs.next()) {
+                rooms.add(new Room(
 
-    // public static void setReservation(Reservation r) { }
+                    // TODO: Finish Room constructor
 
-    // public static void setReview(Review r) { }
+                ));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return rooms;
+    }
+
+    // public ArrayList<Reservation> getReservations(Hashtable<String, String> params) { }
+
+    // public ArrayList<Review> getReviews(Hashtable<String, String> params) { }
+
+    // public void setReservation(Reservation r) { }
+
+    // public void setReview(Review r) { }
 }

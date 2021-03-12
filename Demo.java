@@ -31,13 +31,12 @@ public class Demo {
 
         Hashtable<String, String> params = new Hashtable<String, String>();
         // Current format of schema allows queries in this format:
-        // Name VARCHAR(15) NOT NULL
-        // Region INT NOT NULL
-        // Address VARCHAR(30)
-        // Image VARCHAR(10)
-        // Accessibility INT, 1 or 0
-        // Gym INT, 1 or 0
-        // Spa INT, 1 or 0
+        // Name String
+        // Region Int
+        // Address String
+        // Accessibility Int (1 or 0)
+        // Gym Int (1 or 0)
+        // Spa Int (1 or 0)
 
         params.put("Region", "1"); // Query for region 1 only.
 
