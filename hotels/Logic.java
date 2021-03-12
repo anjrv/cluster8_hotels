@@ -15,7 +15,7 @@ import java.util.Set;
 public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
     private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
-    // private final String[] RESERVATION_PARAMS = {};
+    private final String[] RESERVATION_PARAMS = {};
     private final String[] REVIEW_PARAMS = { "grade" };
 
     /**
