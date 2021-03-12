@@ -4,6 +4,8 @@ import javax.sql.rowset.CachedRowSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -11,6 +13,56 @@ import java.util.Set;
  * Stefánsson Thors
  */
 public class Logic {
+    private final String[] HOTEL_PARAMS = { "name" , "address", "region", "accessibility", "gym", "spa" };
+    private final String[] ROOM_PARAMS = {};
+    private final String[] RESERVATION_PARAMS = {};
+    private final String[] REVIEW_PARAMS = {};
+
+    /**
+     * @return a comprehensive list of valid parameters to getHotels
+     */
+    public String[] getHotelParams() {
+        return HOTEL_PARAMS;
+    }
+
+    /**
+     * @return a comprehensive list of valid parameters to getRooms
+     */
+    public String[] getRoomParams() {
+        return ROOM_PARAMS;
+    }
+
+    /**
+     * @return a comprehensive list of valid parameters to getReservations
+     */
+    public String[] getReservationParams() {
+        return RESERVATION_PARAMS;
+    }
+
+    /**
+     * @return a comprehensive list of valid parameters to getReviews
+     */
+    public String[] getReviewParams() {
+        return REVIEW_PARAMS;
+    }
+
+    /**
+     * Checks whether the keys in the given set of params are
+     * valid to be used in a database query.
+     * 
+     * @param valids String[] a complete array of valid parameters.
+     * @param params Set<String> the given parameters to be compared.
+     */
+    private void validateParams(String[] valids, Set<String> params) {
+        Set<String> validParams = new HashSet<String>(Arrays.asList(valids));
+
+        for (String key : params) {
+            if(!validParams.contains(key.toLowerCase())) {
+                System.err.println("Request parameters contain invalid key: " + key);
+                System.exit(1);
+            }
+        }
+    }
 
     /**
      * Creates an ArrayList of hotels based on the current state of the database and
@@ -23,9 +75,10 @@ public class Logic {
         // Prepare parameters
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
+        validateParams(HOTEL_PARAMS, setOfParameters);
 
-        String sql = "SELECT * FROM hotels";
         int i = 0;
+        String sql = "SELECT * FROM hotels";
         for (String key : setOfParameters) {
             sql += " WHERE " + key + " = ? ";
             if(i != setOfParameters.size()) sql += i > 0 ? "AND" : "";
@@ -33,7 +86,6 @@ public class Logic {
         }
 
         ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-
         try {
             CachedRowSet crs = QueryEngine.query(sql, setOfValues);
             while (crs.next()) {
