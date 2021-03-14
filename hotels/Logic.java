@@ -177,7 +177,7 @@ public class Logic {
     public void setReservation(Hashtable<String, String> params) {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
-        validateParams(REVIEW_PARAMS, setOfParameters);
+        validateParams(RESERVATION_PARAMS, setOfParameters);
 
         String sql = prepareStatement("INSERT INTO reservations(", setOfParameters);
         try {
@@ -207,6 +207,7 @@ public class Logic {
     }
 
     // TODO
+    // finish *_PARAMS constants
     // public ArrayList<Reservation> getReservations(Hashtable<String, String> params) { }
     // public ArrayList<Review> getReviews(Hashtable<String, String> params) { }
 }
