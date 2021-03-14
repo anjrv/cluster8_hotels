@@ -50,11 +50,7 @@ class QueryEngine {
      * @param s currently open Statement object
      * @param r currently open ResultSet object
      */
-    private static void close(Connection c, Statement s, ResultSet r) {
-        try {
-            r.close();
-        } catch (Exception e) {
-            /* Ignored */ }
+    private static void close(Connection c, Statement s) {
         try {
             s.close();
         } catch (Exception e) {
@@ -71,6 +67,7 @@ class QueryEngine {
      * without needing to have an open database connection.
      * 
      * @param sql SQL query string to be executed
+     * @param vals values to be inserted into the given query
      * @return CachedRowSet cached rows from the result of the performed query
      * @throws ClassNotFoundException
      */
@@ -82,7 +79,6 @@ class QueryEngine {
 
         try {
             connection = connect();
-
             statement = connection.prepareStatement(sql);
             for (int i = 0; i < vals.size(); i++) {
                 statement.setString(i+1,vals.get(i));
@@ -92,14 +88,42 @@ class QueryEngine {
             RowSetFactory factory = RowSetProvider.newFactory();
             res = factory.createCachedRowSet();
             res.populate(rs);
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
-            close(connection, statement, rs);
+            try {
+                rs.close();
+            } catch (Exception e) {
+                /* Ignored */ }
+            close(connection, statement);
         }
         return res;
     }
 
-    // TODO: Similar generic for insert and update statements
-    // static void update(String sql) throws ClassNotFoundException {  }
+    /**
+     * Updates the state of the database with the given information.
+     * 
+     * @param sql SQL query string to be executed
+     * @param vals values to be inserted into the given query
+     * @throws ClassNotFoundException
+     */
+    static void update(String sql, ArrayList<String> vals) throws ClassNotFoundException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = connect();
+            statement = connection.prepareStatement(sql);
+            for (int i = 0; i < vals.size(); i++) {
+                statement.setString(i+1,vals.get(i));
+            }
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            close(connection, statement);
+        }
+    }
 }

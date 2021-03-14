@@ -18,7 +18,7 @@ public class Room {
     private int children;
     private boolean wifi;
     private boolean breakfast;
-    //private ArrayList<Reservation> reservations; // list types
+    //private ArrayList<Reservation> reservations;
 
     public Room() {
         // ...
