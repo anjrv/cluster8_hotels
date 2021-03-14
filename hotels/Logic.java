@@ -78,13 +78,15 @@ public class Logic {
         Set<String> setOfParameters = params.keySet();
         validateParams(HOTEL_PARAMS, setOfParameters);
 
-        int i = 0;
         String sql = "SELECT * FROM hotels";
-        for (String key : setOfParameters) {
-            sql += " WHERE " + key + " = ? ";
-            if (i != setOfParameters.size())
-                sql += i > 0 ? "AND" : "";
-            i++;
+        if (setOfParameters.size() > 0) {
+            int i = 1;
+            for (String key : setOfParameters) {
+                sql += " WHERE " + key + " = ? ";
+                if (i != setOfParameters.size())
+                    sql += "AND";
+                i++;
+            }
         }
 
         ArrayList<Hotel> hotels = new ArrayList<Hotel>();
@@ -117,14 +119,17 @@ public class Logic {
         Set<String> setOfParameters = params.keySet();
         validateParams(ROOM_PARAMS, setOfParameters);
 
-        int i = 0;
         String sql = "SELECT * FROM rooms";
-        for (String key : setOfParameters) {
-            sql += " WHERE " + key + " = ? ";
-            if (i != setOfParameters.size())
-                sql += i > 0 ? "AND" : "";
-            i++;
+        if (setOfParameters.size() > 0) {
+            int i = 1;
+            for (String key : setOfParameters) {
+                sql += " WHERE " + key + " = ? ";
+                if (i != setOfParameters.size())
+                    sql += "AND";
+                i++;
+            }
         }
+
 
         ArrayList<Room> rooms = new ArrayList<Room>();
         try {
@@ -155,14 +160,13 @@ public class Logic {
     private String prepareStatement(String sql, Set<String> setOfParameters) {
         String vals = ") VALUES(";
 
-        int i = 0;
+        int i = 1;
         for (String key : setOfParameters) {
             sql += key;
             vals += "?";
             if (i != setOfParameters.size()) {
-                String post = i > 0 ? "," : "";
-                sql += post;
-                vals += post;
+                sql += ",";
+                vals += ",";
             }
             i++;
         }
@@ -183,8 +187,7 @@ public class Logic {
         validateParams(RESERVATION_PARAMS, setOfParameters);
 
         // TODO:
-        // Add to params and values:
-        // reservationID,
+        // make an actual reservationID
         String reservationID = "bla";
 
         setOfParameters.add("createdate");
