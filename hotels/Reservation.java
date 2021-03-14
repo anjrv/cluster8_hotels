@@ -1,6 +1,8 @@
 package hotels;
 
 /**
+ * Object to represent a Reservation from the database.
+ * 
  * Authors:
  * Einar Jónsson
  * Eydís Sylvía Einarsdóttir

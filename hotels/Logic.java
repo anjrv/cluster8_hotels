@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.Set;
 
 /**
+ * Business Logic object to be used to make requests from the hotels API.
+ * 
  * Authors: Einar Jónsson Eydís Sylvía Einarsdóttir Jaan Jaerving Snorri Steinn
  * Stefánsson Thors
  */

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 /**
+ * Script to set up the required files on the system.
+ * 
  * Authors:
  * Einar Jónsson
  * Eydís Sylvía Einarsdóttir

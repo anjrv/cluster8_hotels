@@ -3,6 +3,8 @@ package hotels;
 //import java.util.ArrayList;
 
 /**
+ * Object to represent a Room from the database.
+ * 
  * Authors:
  * Einar Jónsson
  * Eydís Sylvía Einarsdóttir

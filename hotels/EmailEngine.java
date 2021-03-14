@@ -10,6 +10,8 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 /**
+ * Email engine used to send confirmation emails through googles smtp server.
+ * 
  * Authors: Einar Jónsson Eydís Sylvía Einarsdóttir Jaan Jaerving Snorri Steinn
  * Stefánsson Thors
  */

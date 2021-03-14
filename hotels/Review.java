@@ -1,6 +1,8 @@
 package hotels;
 
 /**
+ * Object to represent a Review from the database.
+ * 
  * Authors:
  * Einar Jónsson
  * Eydís Sylvía Einarsdóttir

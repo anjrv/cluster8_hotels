@@ -12,6 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
+ * Package level QueryEngine used for accessing the database.
+ * 
  * Authors:
  * Einar Jónsson
  * Eydís Sylvía Einarsdóttir
