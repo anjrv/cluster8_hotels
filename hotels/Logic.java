@@ -66,6 +66,50 @@ public class Logic {
     }
 
     /**
+     * Private helper function to construct an sql query to be used for an update
+     * statement
+     * 
+     * @param sql             start portion of the desired statement
+     * @param setOfParameters Set of parameters to be used in the query
+     * @return a completed String object that can be used to construct a
+     *         preparedStatement
+     */
+    private String prepareStatement(String sql, Set<String> setOfParameters) {
+        String res = "";
+
+        if (sql.contains("SELECT")) {
+            if (setOfParameters.size() > 0) {
+                int i = 1;
+                for (String key : setOfParameters) {
+                    sql += " WHERE " + key + " = ? ";
+                    if (i != setOfParameters.size())
+                        sql += "AND";
+                    i++;
+                }
+            }
+
+            res += sql;
+        } else {
+            String vals = ") VALUES(";
+
+            int i = 1;
+            for (String key : setOfParameters) {
+                sql += key;
+                vals += "?";
+                if (i != setOfParameters.size()) {
+                    sql += ",";
+                    vals += ",";
+                }
+                i++;
+            }
+
+            res += sql + vals + ")";
+        }
+
+        return res;
+    }
+
+    /**
      * Creates an ArrayList of hotels based on the current state of the database and
      * the parameters provided by the argument.
      * 
@@ -78,16 +122,7 @@ public class Logic {
         Set<String> setOfParameters = params.keySet();
         validateParams(HOTEL_PARAMS, setOfParameters);
 
-        String sql = "SELECT * FROM hotels";
-        if (setOfParameters.size() > 0) {
-            int i = 1;
-            for (String key : setOfParameters) {
-                sql += " WHERE " + key + " = ? ";
-                if (i != setOfParameters.size())
-                    sql += "AND";
-                i++;
-            }
-        }
+        String sql = prepareStatement("SELECT * FROM hotels", setOfParameters);
 
         ArrayList<Hotel> hotels = new ArrayList<Hotel>();
         try {
@@ -119,17 +154,7 @@ public class Logic {
         Set<String> setOfParameters = params.keySet();
         validateParams(ROOM_PARAMS, setOfParameters);
 
-        String sql = "SELECT * FROM rooms";
-        if (setOfParameters.size() > 0) {
-            int i = 1;
-            for (String key : setOfParameters) {
-                sql += " WHERE " + key + " = ? ";
-                if (i != setOfParameters.size())
-                    sql += "AND";
-                i++;
-            }
-        }
-
+        String sql = prepareStatement("SELECT * FROM rooms", setOfParameters);
 
         ArrayList<Room> rooms = new ArrayList<Room>();
         try {
@@ -146,32 +171,6 @@ public class Logic {
         }
 
         return rooms;
-    }
-
-    /**
-     * Private helper function to construct an sql query to be used for an update
-     * statement
-     * 
-     * @param sql             start portion of the desired statement
-     * @param setOfParameters Set of parameters to be used in the query
-     * @return a completed String object that can be used to construct a
-     *         preparedStatement
-     */
-    private String prepareStatement(String sql, Set<String> setOfParameters) {
-        String vals = ") VALUES(";
-
-        int i = 1;
-        for (String key : setOfParameters) {
-            sql += key;
-            vals += "?";
-            if (i != setOfParameters.size()) {
-                sql += ",";
-                vals += ",";
-            }
-            i++;
-        }
-
-        return sql + vals + ")";
     }
 
     /**
