@@ -189,8 +189,7 @@ public class Logic {
         // See:
         // https://www.javatpoint.com/example-of-sending-email-using-java-mail-api-through-gmail-server
 
-        Date date = new Date();
-        String createdate = String.valueOf(date.getTime());
+        String createdate = String.valueOf(new Date().getTime());
 
         setOfParameters.add("createdate");
         setOfValues.add(createdate);
