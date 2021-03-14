@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.HashSet;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -15,8 +16,8 @@ import java.util.Set;
 public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
     private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
-    private final String[] RESERVATION_PARAMS = {};
-    private final String[] REVIEW_PARAMS = { "grade" };
+    private final String[] RESERVATION_PARAMS = { "startdate", "enddate", "paid", "contact", "hname", "rnumber" };
+    private final String[] REVIEW_PARAMS = { "hname", "rnumber", "text", "resID" };
 
     /**
      * @return a comprehensive list of valid parameters to getHotels
@@ -68,7 +69,8 @@ public class Logic {
      * Creates an ArrayList of hotels based on the current state of the database and
      * the parameters provided by the argument.
      * 
-     * @param params a Hashtable of parameter and value pairs to be added to the query
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
      * @return an ArrayList of Hotel objects that match the parameters
      */
     public ArrayList<Hotel> getHotels(Hashtable<String, String> params) {
@@ -106,7 +108,8 @@ public class Logic {
      * Creates an ArrayList of rooms based on the current state of the database and
      * the parameters provided by the argument.
      * 
-     * @param params a Hashtable of parameter and value pairs to be added to the query
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
      * @return an ArrayList of Room objects that match the parameters
      */
     public ArrayList<Room> getRooms(Hashtable<String, String> params) {
@@ -141,43 +144,58 @@ public class Logic {
     }
 
     /**
-     * Private helper function to construct an sql query to be used for an update statement
+     * Private helper function to construct an sql query to be used for an update
+     * statement
      * 
-     * @param sql start portion of the desired statement
+     * @param sql             start portion of the desired statement
      * @param setOfParameters Set of parameters to be used in the query
-     * @return a completed String object that can be used to construct a preparedStatement
+     * @return a completed String object that can be used to construct a
+     *         preparedStatement
      */
     private String prepareStatement(String sql, Set<String> setOfParameters) {
+        String vals = ") VALUES(";
 
         int i = 0;
         for (String key : setOfParameters) {
             sql += key;
-            if (i != setOfParameters.size())
-                sql += i > 0 ? "," : "";
+            vals += "?";
+            if (i != setOfParameters.size()) {
+                String post = i > 0 ? "," : "";
+                sql += post;
+                vals += post;
+            }
             i++;
         }
 
-        sql += ") VALUES(";
-        for (; i > 0; i--) {
-            sql += "?";
-            if (i != 1)
-                sql += ",";
-        }
-        sql += ")";
-
-        return sql;
+        return sql + vals + ")";
     }
 
     /**
-     * Inserts a reservation based on the current state of the database and
-     * the parameters provided by the argument.
+     * Inserts a reservation based on the current state of the database and the
+     * parameters provided by the argument.
      * 
-     * @param params a hashtable of parameter and value pairs to be added to the query
+     * @param params a hashtable of parameter and value pairs to be added to the
+     *               query
      */
     public void setReservation(Hashtable<String, String> params) {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(RESERVATION_PARAMS, setOfParameters);
+
+        // TODO:
+        // Add to params and values:
+        // reservationID,
+        // Confirmation email functionality
+        // See:
+        // https://www.javatpoint.com/example-of-sending-email-using-java-mail-api-through-gmail-server
+
+        Date date = new Date();
+        String createdate = String.valueOf(date.getTime());
+
+        setOfParameters.add("createdate");
+        setOfValues.add(createdate);
+        setOfParameters.add("cancelled");
+        setOfValues.add("0");
 
         String sql = prepareStatement("INSERT INTO reservations(", setOfParameters);
         try {
@@ -188,10 +206,11 @@ public class Logic {
     }
 
     /**
-     * Inserts a review based on the current state of the database and
-     * the parameters provided by the argument.
+     * Inserts a review based on the current state of the database and the
+     * parameters provided by the argument.
      * 
-     * @param params a hashtable of parameter and value pairs to be added to the query
+     * @param params a hashtable of parameter and value pairs to be added to the
+     *               query
      */
     public void setReview(Hashtable<String, String> params) {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
@@ -207,7 +226,7 @@ public class Logic {
     }
 
     // TODO
-    // finish *_PARAMS constants
-    // public ArrayList<Reservation> getReservations(Hashtable<String, String> params) { }
+    // public ArrayList<Reservation> getReservations(Hashtable<String, String>
+    // params) { }
     // public ArrayList<Review> getReviews(Hashtable<String, String> params) { }
 }
