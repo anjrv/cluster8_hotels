@@ -71,7 +71,7 @@ class QueryEngine {
      * @return CachedRowSet cached rows from the result of the performed query
      * @throws ClassNotFoundException
      */
-    static CachedRowSet query(String sql, ArrayList<String> vals) throws ClassNotFoundException {
+    static CachedRowSet query(String sql, ArrayList<String> vals) throws ClassNotFoundException, SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         CachedRowSet res = null;
@@ -108,7 +108,7 @@ class QueryEngine {
      * @param vals values to be inserted into the given query
      * @throws ClassNotFoundException
      */
-    static void update(String sql, ArrayList<String> vals) throws ClassNotFoundException {
+    static void update(String sql, ArrayList<String> vals) throws ClassNotFoundException, SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
 

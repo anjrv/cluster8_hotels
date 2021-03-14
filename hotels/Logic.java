@@ -185,9 +185,7 @@ public class Logic {
         // TODO:
         // Add to params and values:
         // reservationID,
-        // Confirmation email functionality
-        // See:
-        // https://www.javatpoint.com/example-of-sending-email-using-java-mail-api-through-gmail-server
+        String reservationID = "bla";
 
         setOfParameters.add("createdate");
         setOfValues.add(String.valueOf(new Date().getTime()));
@@ -197,9 +195,19 @@ public class Logic {
         String sql = prepareStatement("INSERT INTO reservations(", setOfParameters);
         try {
             QueryEngine.update(sql, setOfValues);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
+            System.exit(1); // Do not send email if update fails.
         }
+
+        String sub = "Confirmation for your booking at " + params.get("hname");
+        String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + "Thank you for booking with "
+                + params.get("hname") + System.lineSeparator() + "Your reservation ID is: " + reservationID
+                + ". This unique ID can be used to change your booking or cancel if needed!" + System.lineSeparator()
+                + System.lineSeparator() + "We hope you enjoy your stay," + System.lineSeparator()
+                + "The Cluster 8 Hotels Team";
+
+        EmailEngine.send(params.get("contact"), sub, msg);
     }
 
     /**
@@ -217,7 +225,7 @@ public class Logic {
         String sql = prepareStatement("INSERT INTO reviews(", setOfParameters);
         try {
             QueryEngine.update(sql, setOfValues);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
         }
     }
