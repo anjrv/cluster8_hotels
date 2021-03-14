@@ -3,11 +3,8 @@ package hotels;
 /**
  * Object to represent a Reservation from the database.
  * 
- * Authors:
- * Einar Jónsson
- * Eydís Sylvía Einarsdóttir
- * Jaan Jaerving
- * Snorri Steinn Stefánsson Thors
+ * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ * Steinn Stefánsson Thors
  */
 public class Reservation {
     private String reservationID;
@@ -24,7 +21,7 @@ public class Reservation {
     public Reservation(long s, long e, String c, String hn, int rn) {
         this.startDate = s;
         this.endDate = e;
-        
+
         // hname
         // rnumber
         initialize();

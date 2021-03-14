@@ -14,18 +14,14 @@ import java.util.ArrayList;
 /**
  * Package level QueryEngine used for accessing the database.
  * 
- * Authors:
- * Einar Jónsson
- * Eydís Sylvía Einarsdóttir
- * Jaan Jaerving
- * Snorri Steinn Stefánsson Thors
+ * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ * Steinn Stefánsson Thors
  */
 class QueryEngine {
     private static final String DB_PATH = "hotels/hotels.db"; // Package path to the generated database
 
     /**
-     * Helper function that returns 
-     * a valid open Connection object
+     * Helper function that returns a valid open Connection object
      * 
      * @return Connection
      * @throws ClassNotFoundException
@@ -45,8 +41,7 @@ class QueryEngine {
     }
 
     /**
-     * Helper function that closes
-     * open database communication
+     * Helper function that closes open database communication
      * 
      * @param c currently open Connection object
      * @param s currently open Statement object
@@ -64,11 +59,11 @@ class QueryEngine {
     }
 
     /**
-     * Queries the database according to the SQL query parameters
-     * returns a set of cached row results that can be worked with
-     * without needing to have an open database connection.
+     * Queries the database according to the SQL query parameters returns a set of
+     * cached row results that can be worked with without needing to have an open
+     * database connection.
      * 
-     * @param sql SQL query string to be executed
+     * @param sql  SQL query string to be executed
      * @param vals values to be inserted into the given query
      * @return CachedRowSet cached rows from the result of the performed query
      * @throws ClassNotFoundException
@@ -83,7 +78,7 @@ class QueryEngine {
             connection = connect();
             statement = connection.prepareStatement(sql);
             for (int i = 0; i < vals.size(); i++) {
-                statement.setString(i+1,vals.get(i));
+                statement.setString(i + 1, vals.get(i));
             }
             rs = statement.executeQuery();
 
@@ -106,7 +101,7 @@ class QueryEngine {
     /**
      * Updates the state of the database with the given information.
      * 
-     * @param sql SQL query string to be executed
+     * @param sql  SQL query string to be executed
      * @param vals values to be inserted into the given query
      * @throws ClassNotFoundException
      */
@@ -118,7 +113,7 @@ class QueryEngine {
             connection = connect();
             statement = connection.prepareStatement(sql);
             for (int i = 0; i < vals.size(); i++) {
-                statement.setString(i+1,vals.get(i));
+                statement.setString(i + 1, vals.get(i));
             }
             statement.executeUpdate();
 

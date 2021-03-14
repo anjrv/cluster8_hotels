@@ -11,20 +11,15 @@ import java.util.Scanner;
 /**
  * Script to set up the required files on the system.
  * 
- * Authors:
- * Einar Jónsson
- * Eydís Sylvía Einarsdóttir
- * Jaan Jaerving
- * Snorri Steinn Stefánsson Thors
+ * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ * Steinn Stefánsson Thors
  */
 public class Setup {
     private static final String SQL_PATH = "hotels/schema.sql";
     private static final String DB_PATH = "hotels/hotels.db";
 
     /**
-     * Helper function that creates
-     * a database file if it does not
-     * yet exist.
+     * Helper function that creates a database file if it does not yet exist.
      * 
      * @throws IOException
      */
@@ -43,14 +38,11 @@ public class Setup {
     }
 
     /**
-     * Will attempt to create and populate
-     * a database in the current package
+     * Will attempt to create and populate a database in the current package
      * directory if it does not already exist.
      * 
-     * In order to not overwrite information
-     * that already exists the program will exit
-     * if any existing database or tables
-     * are detected.
+     * In order to not overwrite information that already exists the program will
+     * exit if any existing database or tables are detected.
      * 
      * @param args
      * @throws IOException

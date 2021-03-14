@@ -12,8 +12,8 @@ import java.util.Set;
 /**
  * Business Logic object to be used to make requests from the hotels API.
  * 
- * Authors: Einar Jónsson Eydís Sylvía Einarsdóttir Jaan Jaerving Snorri Steinn
- * Stefánsson Thors
+ * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ * Steinn Stefánsson Thors
  */
 public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
@@ -36,14 +36,14 @@ public class Logic {
     }
 
     /**
-     * @return a comprehensive list of valid parameters to getReservations
+     * @return a comprehensive list of valid parameters to use with reservations
      */
     public String[] getReservationParams() {
         return RESERVATION_PARAMS;
     }
 
     /**
-     * @return a comprehensive list of valid parameters to getReviews
+     * @return a comprehensive list of valid parameters to use with reviews
      */
     public String[] getReviewParams() {
         return REVIEW_PARAMS;
@@ -93,7 +93,6 @@ public class Logic {
             res += sql;
         } else {
             String vals = ") VALUES(";
-
             int i = 1;
             for (String key : setOfParameters) {
                 sql += key;

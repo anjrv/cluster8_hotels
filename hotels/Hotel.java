@@ -5,11 +5,8 @@ import java.util.ArrayList;
 /**
  * Object to represent a Hotel from the database.
  * 
- * Authors:
- * Einar Jónsson
- * Eydís Sylvía Einarsdóttir
- * Jaan Jaerving
- * Snorri Steinn Stefánsson Thors
+ * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ * Steinn Stefánsson Thors
  */
 public class Hotel {
     private String name;
@@ -20,7 +17,7 @@ public class Hotel {
     private boolean gym;
     private boolean spa;
     private ArrayList<Room> rooms;
-    
+
     public Hotel(String n, String a, String img, int r, boolean acc, boolean gym, boolean spa, ArrayList<Room> rms) {
         this.name = n;
         this.address = a;

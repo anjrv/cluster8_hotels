@@ -12,8 +12,8 @@ import javax.mail.internet.*;
 /**
  * Email engine used to send confirmation emails through googles smtp server.
  * 
- * Authors: Einar Jónsson Eydís Sylvía Einarsdóttir Jaan Jaerving Snorri Steinn
- * Stefánsson Thors
+ * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ * Steinn Stefánsson Thors
  */
 class EmailEngine {
     // Dummy gmail account information for this project, do not steal!
@@ -23,7 +23,7 @@ class EmailEngine {
     /**
      * Sends a confirmation email from the project email account FROM.
      * 
-     * @param to the email address to send to
+     * @param to  the email address to send to
      * @param sub the subject of the message
      * @param msg the text body of the message
      */

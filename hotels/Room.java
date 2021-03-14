@@ -5,11 +5,8 @@ package hotels;
 /**
  * Object to represent a Room from the database.
  * 
- * Authors:
- * Einar Jónsson
- * Eydís Sylvía Einarsdóttir
- * Jaan Jaerving
- * Snorri Steinn Stefánsson Thors
+ * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ * Steinn Stefánsson Thors
  */
 public class Room {
     private int rnumber;
@@ -20,7 +17,7 @@ public class Room {
     private int children;
     private boolean wifi;
     private boolean breakfast;
-    //private ArrayList<Reservation> reservations;
+    // private ArrayList<Reservation> reservations;
 
     public Room() {
         // ...
@@ -58,6 +55,6 @@ public class Room {
         return breakfast;
     }
 
-    //public void addReservation(Reservation r) {
-    //}
+    // public void addReservation(Reservation r) {
+    // }
 }
