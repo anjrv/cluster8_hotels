@@ -1,7 +1,8 @@
 # Version control for Cluster 8 Hotels
 
 **Required dependencies:**
-hoteldeps.jar located in the root of the project contains dependencies for the JDBC driver as well as mail and activation drivers that provide email features. It is required to compile the email engine and is required by both the email engine and database functions at runtime.
+\\
+hoteldeps.jar located in the root of the project contains dependencies for the JDBC driver as well as mail and activation drivers that provide email features. It is required to compile the email engine and is required by both the email engine and query engine at runtime.
 
 **Initial setup done by:**
 * Compile required class:

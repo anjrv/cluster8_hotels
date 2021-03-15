@@ -19,7 +19,8 @@ import java.io.File;
  * Steinn Stefánsson Thors
  */
 class QueryEngine {
-    private static final String DB_PATH = "hotels"+File.separator+"hotels.db"; // Package path to the generated database
+    private static final String DB_PATH = "hotels" + File.separator + "hotels.db"; // Package path to the generated
+                                                                                   // database
 
     /**
      * Helper function that returns a valid open Connection object

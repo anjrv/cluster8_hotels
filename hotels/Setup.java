@@ -15,8 +15,8 @@ import java.util.Scanner;
  * Steinn Stefánsson Thors
  */
 public class Setup {
-    private static final String SQL_PATH = "hotels"+File.separator+"schema.sql";
-    private static final String DB_PATH = "hotels"+File.separator+"hotels.db";
+    private static final String SQL_PATH = "hotels" + File.separator + "schema.sql";
+    private static final String DB_PATH = "hotels" + File.separator + "hotels.db";
 
     /**
      * Helper function that creates a database file if it does not yet exist.
