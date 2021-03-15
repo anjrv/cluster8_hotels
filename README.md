@@ -6,16 +6,16 @@ hoteldeps.jar located in the root of the project contains dependencies for the J
 
 **Initial setup done by:**
 * Compile required class:
-    - On windows: `javac -cp .;hoteldeps.jar hotels/*.java`
-    - On UNIX: `javac -cp .:hoteldeps.jar hotels/*.java`
+    - On Windows: `javac -cp ".;hoteldeps.jar" hotels/*.java`
+    - On UNIX/Mac: `javac -cp .:hoteldeps.jar hotels/*.java`
 * Prepare database by running the included Setup script:
-    - On windows: `java -cp .;hoteldeps.jar hotels/Setup`
-    - On UNIX: `java -cp .:hoteldeps.jar hotels/Setup`
+    - On Windows: `java -cp ".;hoteldeps.jar" hotels/Setup`
+    - On UNIX/Mac: `java -cp .:hoteldeps.jar hotels/Setup`
 
 Setup process will create the required database and populate it according to the information within the included schema.sql script.
 
 **A short demo class that provides an example of interface connection:**
 * Compile required class file with `javac Demo.java`
 * Run with:
-    - On windows: `java -cp .;hoteldeps.jar Demo`
-    - On UNIX: `java -cp .:hoteldeps.jar Demo`
+    - On Windows: `java -cp ".;hoteldeps.jar" Demo`
+    - On UNIX/Mac: `java -cp .:hoteldeps.jar Demo`
