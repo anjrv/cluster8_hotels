@@ -12,14 +12,14 @@ import java.util.Set;
 /**
  * Business Logic object to be used to make requests from the hotels API.
  * 
- * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
- * Steinn Stefánsson Thors
+ * @author Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ *         Steinn Stefánsson Thors
  */
 public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
     private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
     private final String[] RESERVATION_PARAMS = { "startdate", "enddate", "paid", "contact", "hname", "rnumber" };
-    private final String[] REVIEW_PARAMS = { "hname", "rnumber", "text", "resID" };
+    private final String[] REVIEW_PARAMS = { "hname", "grade" };
 
     /**
      * @return a comprehensive list of valid parameters to getHotels
@@ -50,8 +50,8 @@ public class Logic {
     }
 
     /**
-     * Checks whether the keys in the given set of params are valid to be used in a
-     * database query.
+     * Private helper function to check whether the keys in the given set of params
+     * are valid to be used in a database query.
      * 
      * @param valids String[] a complete array of valid parameters.
      * @param params Set<String> the given parameters to be compared.
@@ -111,35 +111,62 @@ public class Logic {
     }
 
     /**
-     * Creates an ArrayList of hotels based on the current state of the database and
-     * the parameters provided by the argument.
+     * Creates an ArrayList of reviews based on the current state of the database
+     * and the parameters provided by the argument.
      * 
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
-     * @return an ArrayList of Hotel objects that match the parameters
+     * @return an ArrayList of Review objects that match the parameters
      */
-    public ArrayList<Hotel> getHotels(Hashtable<String, String> params) {
+    public ArrayList<Review> getReviews(Hashtable<String, String> params) {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
-        validateParams(HOTEL_PARAMS, setOfParameters);
+        validateParams(REVIEW_PARAMS, setOfParameters);
 
-        String sql = prepareStatement("SELECT * FROM hotels", setOfParameters);
+        String sql = prepareStatement("SELECT * FROM reviews", setOfParameters);
 
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+        ArrayList<Review> reviews = new ArrayList<Review>();
         try {
             CachedRowSet crs = QueryEngine.query(sql, setOfValues);
             while (crs.next()) {
-                hotels.add(new Hotel(crs.getString("name"), crs.getString("address"), crs.getString("image"),
-                        crs.getInt("region"), crs.getBoolean("accessibility"), crs.getBoolean("gym"),
-                        crs.getBoolean("spa"), new ArrayList<Room>() // Fetch available rooms, crosscheck on Rooms and
-                                                                     // Reservations
-                ));
+                reviews.add(new Review(crs.getInt("grade"), crs.getString("hname"), crs.getString("text")));
             }
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
 
-        return hotels;
+        return reviews;
+    }
+
+    /**
+     * Creates an ArrayList of reservations based on the current state of the
+     * database and the parameters provided by the argument.
+     * 
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
+     * @return an ArrayList of Reservation objects that match the parameters
+     */
+    public ArrayList<Reservation> getReservations(Hashtable<String, String> params) {
+        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
+        Set<String> setOfParameters = params.keySet();
+        validateParams(REVIEW_PARAMS, setOfParameters);
+
+        String sql = prepareStatement("SELECT * FROM reservations", setOfParameters);
+
+        ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+        try {
+            CachedRowSet crs = QueryEngine.query(sql, setOfValues);
+            while (crs.next()) {
+                reservations.add(new Reservation(crs.getString("reservationID"), crs.getLong("creationDate"),
+                        crs.getLong("startDate"), crs.getLong("endDate"), crs.getBoolean("cancelled"),
+                        crs.getBoolean("paid"), crs.getString("contact"), crs.getString("hname"),
+                        crs.getInt("rnumber")));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return reservations;
     }
 
     /**
@@ -161,17 +188,54 @@ public class Logic {
         try {
             CachedRowSet crs = QueryEngine.query(sql, setOfValues);
             while (crs.next()) {
-                rooms.add(new Room(
+                String hname = crs.getString("hname");
+                int rnumber = crs.getInt("rnumber");
+                Hashtable<String, String> tmp = new Hashtable<String, String>();
+                tmp.put("hname", hname);
+                tmp.put("rnumber", String.valueOf(rnumber));
 
-                // TODO: Finish Room constructor
-
-                ));
+                rooms.add(new Room(rnumber, hname, crs.getInt("price"), crs.getInt("beds"), crs.getInt("adults"),
+                        crs.getInt("children"), crs.getBoolean("wifi"), crs.getBoolean("breakfast"),
+                        getReservations(tmp)));
             }
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
 
         return rooms;
+    }
+
+    /**
+     * Creates an ArrayList of hotels based on the current state of the database and
+     * the parameters provided by the argument.
+     * 
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
+     * @return an ArrayList of Hotel objects that match the parameters
+     */
+    public ArrayList<Hotel> getHotels(Hashtable<String, String> params) {
+        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
+        Set<String> setOfParameters = params.keySet();
+        validateParams(HOTEL_PARAMS, setOfParameters);
+
+        String sql = prepareStatement("SELECT * FROM hotels", setOfParameters);
+
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+        try {
+            CachedRowSet crs = QueryEngine.query(sql, setOfValues);
+            while (crs.next()) {
+                String hname = crs.getString("name");
+                Hashtable<String, String> tmp = new Hashtable<String, String>();
+                tmp.put("hname", hname);
+
+                hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
+                        crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp)));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return hotels;
     }
 
     /**
@@ -186,12 +250,14 @@ public class Logic {
         Set<String> setOfParameters = params.keySet();
         validateParams(RESERVATION_PARAMS, setOfParameters);
 
-        // TODO:
-        // make an actual reservationID
-        String reservationID = "bla";
+        String createDate = String.valueOf(new Date().getTime());
+        String reservationID = params.get("rnumber") + params.get("hname")
+                + createDate.substring(createDate.length() - 6);
 
+        setOfParameters.add("reservationID");
+        setOfValues.add(reservationID);
         setOfParameters.add("createdate");
-        setOfValues.add(String.valueOf(new Date().getTime()));
+        setOfValues.add(createDate);
         setOfParameters.add("cancelled");
         setOfValues.add("0");
 
@@ -233,8 +299,6 @@ public class Logic {
         }
     }
 
-    // TODO
-    // public ArrayList<Reservation> getReservations(Hashtable<String, String>
-    // params) { }
-    // public ArrayList<Review> getReviews(Hashtable<String, String> params) { }
+    // TODO: Alternative method times when given a timeframe e.g.
+    // getHotels(Hashtable>String, String> params, long start, long end) ...
 }
