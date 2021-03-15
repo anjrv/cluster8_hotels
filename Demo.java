@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import hotels.Logic;
 import hotels.Hotel;
+import hotels.Room;
 
 /**
  * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
@@ -22,28 +23,38 @@ public class Demo {
     public static void main(String[] args) {
         Logic bn = new Logic();
 
-        Hashtable<String, String> params = new Hashtable<String, String>();
-        // Current format of schema allows queries in this format:
-        // Name String
-        // Region Int
-        // Address String
-        // Accessibility Int (1 or 0)
-        // Gym Int (1 or 0)
-        // Spa Int (1 or 0)
+        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
 
-        params.put("Region", "1"); // Query for region 1 only.
+        String[] validHotelParams = bn.getHotelParams();
+        System.out.println("Valid parameters to query hotels are:");
+        for (int i = 0; i < validHotelParams.length; i++) {
+            System.out.println(validHotelParams[i]);
+        }
+
+        hotelParams.put("Region", "1"); // Query for region 1 only.
 
         try {
-            ArrayList<Hotel> hotels = bn.getHotels(params);
+            ArrayList<Hotel> hotels = bn.getHotels(hotelParams);
             // If working with Review, Room or Reservation objects
             // those Object classes need to be imported in the same
             // way that the Hotel object has been at the top of this
             // file
 
+            System.out.println("-----------------------------------------------------");
+            System.out.println("Query based on region 1 returns the following hotels:");
             for (int i = 0; i < hotels.size(); i++) {
                 System.out.println(hotels.get(i).getName());
             }
+
+            // Example of room query based on hotel name, not yet finished.
+            // if(hotels.size() > 0) {
+            //     Hashtable<String, String> roomParams = new Hashtable<String, String>();
+            //     roomParams.put("hname", hotels.get(0).getName());
+            //     
+            //     ArrayList<Room> rooms = bn.getRooms(roomParams);
+            // }
         } catch (Exception e) {
+            System.err.println("Demo error: " + e);
         }
     }
 }
