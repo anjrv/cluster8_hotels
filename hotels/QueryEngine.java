@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.io.File;
 
 /**
  * Package level QueryEngine used for accessing the database.
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * Steinn Stefánsson Thors
  */
 class QueryEngine {
-    private static final String DB_PATH = "hotels/hotels.db"; // Package path to the generated database
+    private static final String DB_PATH = "hotels"+File.separator+"hotels.db"; // Package path to the generated database
 
     /**
      * Helper function that returns a valid open Connection object
