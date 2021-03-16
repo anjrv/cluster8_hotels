@@ -11,7 +11,7 @@ import java.util.Scanner;
 /**
  * Script to set up the required files on the system.
  * 
- * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ * @author: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
  * Steinn Stefánsson Thors
  */
 public class Setup {
@@ -32,8 +32,8 @@ public class Setup {
                 System.out.println("Database already exists.");
                 System.exit(0);
             }
-        } catch (Exception e) {
-            System.err.println(e);
+        } catch (Exception err) {
+            System.err.println(err);
         }
     }
 

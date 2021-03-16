@@ -69,8 +69,8 @@ public class Demo {
 
 
 
-        } catch (Exception e) {
-            System.err.println("Demo error: " + e);
+        } catch (Exception err) {
+            System.err.println("Demo error: " + err);
         }
     }
 }

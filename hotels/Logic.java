@@ -141,8 +141,8 @@ public class Logic {
             while (crs.next()) {
                 reviews.add(new Review(crs.getInt("grade"), crs.getString("hname"), crs.getString("text")));
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException | ClassNotFoundException err) {
+            System.out.println(err.getMessage());
         }
 
         return reviews;
@@ -172,8 +172,8 @@ public class Logic {
                         crs.getBoolean("paid"), crs.getString("contact"), crs.getString("hname"),
                         crs.getInt("rnumber")));
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException | ClassNotFoundException err) {
+            System.out.println(err.getMessage());
         }
 
         return reservations;
@@ -209,8 +209,8 @@ public class Logic {
                         // getReservations(tmp)
                         new ArrayList<Reservation>()));
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException | ClassNotFoundException err) {
+            System.out.println(err.getMessage());
         }
 
         return rooms;
@@ -242,8 +242,8 @@ public class Logic {
                 hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
                         crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp)));
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException | ClassNotFoundException err) {
+            System.out.println(err.getMessage());
         }
 
         return hotels;
@@ -337,15 +337,16 @@ public class Logic {
                 tmp.put("hname", hname);
 
                 hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
-                        crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp, st, e)));
+                        crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"),
+                        getRooms(tmp, st, e)));
             }
         } catch (SQLException | ClassNotFoundException err) {
             System.out.println(err.getMessage());
         }
 
         ArrayList<Hotel> noAvail = new ArrayList<Hotel>();
-        for(Hotel h : hotels) {
-            if(h.getRooms().size() == 0)
+        for (Hotel h : hotels) {
+            if (h.getRooms().size() == 0)
                 noAvail.add(h);
         }
 
@@ -379,8 +380,8 @@ public class Logic {
         String sql = prepareStatement("INSERT INTO reservations(", setOfParameters);
         try {
             QueryEngine.update(sql, setOfValues);
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException | SQLException err) {
+            System.out.println(err.getMessage());
             System.exit(1); // Do not send email if update fails.
         }
 
@@ -409,8 +410,8 @@ public class Logic {
         String sql = prepareStatement("INSERT INTO reviews(", setOfParameters);
         try {
             QueryEngine.update(sql, setOfValues);
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException | SQLException err) {
+            System.out.println(err.getMessage());
         }
     }
 }

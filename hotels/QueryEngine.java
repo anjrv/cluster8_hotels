@@ -15,8 +15,8 @@ import java.io.File;
 /**
  * Package level QueryEngine used for accessing the database.
  * 
- * Authors: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
- * Steinn Stefánsson Thors
+ * @author: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
+ *          Steinn Stefánsson Thors
  */
 class QueryEngine {
     private static final String DB_PATH = "hotels" + File.separator + "hotels.db"; // Package path to the generated
@@ -35,8 +35,8 @@ class QueryEngine {
 
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
+        } catch (SQLException err) {
+            System.err.println(err.getMessage());
         }
 
         return connection;
@@ -52,11 +52,11 @@ class QueryEngine {
     private static void close(Connection c, Statement s) {
         try {
             s.close();
-        } catch (Exception e) {
+        } catch (Exception err) {
             /* Ignored */ }
         try {
             c.close();
-        } catch (Exception e) {
+        } catch (Exception err) {
             /* Ignored */ }
     }
 
@@ -88,12 +88,12 @@ class QueryEngine {
             res = factory.createCachedRowSet();
             res.populate(rs);
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException err) {
+            System.out.println(err.getMessage());
         } finally {
             try {
                 rs.close();
-            } catch (Exception e) {
+            } catch (Exception err) {
                 /* Ignored */ }
             close(connection, statement);
         }
@@ -119,8 +119,8 @@ class QueryEngine {
             }
             statement.executeUpdate();
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException err) {
+            System.out.println(err.getMessage());
         } finally {
             close(connection, statement);
         }
