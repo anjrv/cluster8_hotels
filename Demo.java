@@ -23,17 +23,16 @@ public class Demo {
     public static void main(String[] args) {
         Logic bn = new Logic();
 
-        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
-
         String[] validHotelParams = bn.getHotelParams();
         System.out.println("Valid parameters to query hotels are:");
         for (int i = 0; i < validHotelParams.length; i++) {
             System.out.println(validHotelParams[i]);
         }
 
-        hotelParams.put("Region", "1"); // Query for region 1 only.
-
         try {
+            Hashtable<String, String> hotelParams = new Hashtable<String, String>();
+            hotelParams.put("Region", "0"); // Query for region 1 only.
+
             ArrayList<Hotel> hotels = bn.getHotels(hotelParams);
             // If working with Review, Room or Reservation objects
             // those Object classes need to be imported in the same
@@ -41,7 +40,7 @@ public class Demo {
             // file
 
             System.out.println("-------------------------------------------------------");
-            System.out.println("Query based on region 1 returns the following hotels:");
+            System.out.println("Query based on region 0 returns the following hotels:");
             for (int i = 0; i < hotels.size(); i++) {
                 System.out.println(hotels.get(i).getName());
             }
@@ -51,9 +50,24 @@ public class Demo {
             for (int i = 0; i < hotels.size(); i++) {
                 ArrayList<Room> rooms = hotels.get(i).getRooms();
                 for (int j = 0; j < rooms.size(); j++) {
-                    System.out.println(rooms.get(i).getRnumber());
+                    System.out.println(rooms.get(j).getRnumber());
                 }
             }
+
+            Hashtable<String, String> roomParams = new Hashtable<String, String>();
+            roomParams.put("wifi","1");
+            roomParams.put("adults","1");
+
+            ArrayList<Room> rooms2 = bn.getRooms(roomParams);
+
+            System.out.println("-------------------------------------------------------");
+            System.out.println("Query of rooms based on wifi and 1 adult:");
+            for (int i = 0; i < rooms2.size(); i++) {
+                System.out.println(rooms2.get(i).getRnumber());
+            }
+
+
+
 
         } catch (Exception e) {
             System.err.println("Demo error: " + e);

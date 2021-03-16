@@ -19,7 +19,8 @@ public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
     private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
     private final String[] RESERVATION_PARAMS = { "startdate", "enddate", "paid", "contact", "hname", "rnumber" };
-    private final String[] REVIEW_PARAMS = { "hname", "grade" };
+    private final String[] REVIEW_SELECT_PARAMS = { "hname", "grade" };
+    private final String[] REVIEW_INSERT_PARAMS = { "grade", "hname", "rnumber", "text", "resID" };
 
     /**
      * @return a comprehensive list of valid parameters to getHotels
@@ -43,10 +44,17 @@ public class Logic {
     }
 
     /**
-     * @return a comprehensive list of valid parameters to use with reviews
+     * @return a comprehensive list of valid parameters to use with review selection
      */
-    public String[] getReviewParams() {
-        return REVIEW_PARAMS;
+    public String[] getReviewSelectParams() {
+        return REVIEW_SELECT_PARAMS;
+    }
+
+    /**
+     * @return a comprehensive list of valid parameters to use with review insertion
+     */
+    public String[] getReviewInsertParams() {
+        return REVIEW_INSERT_PARAMS;
     }
 
     /**
@@ -81,11 +89,12 @@ public class Logic {
 
         if (sql.contains("SELECT")) {
             if (setOfParameters.size() > 0) {
+                sql += " WHERE ";
                 int i = 1;
                 for (String key : setOfParameters) {
-                    sql += " WHERE " + key + " = ? ";
+                    sql += key + " = ? ";
                     if (i != setOfParameters.size())
-                        sql += "AND";
+                        sql += "AND ";
                     i++;
                 }
             }
@@ -107,6 +116,7 @@ public class Logic {
             res += sql + vals + ")";
         }
 
+        System.out.println(res);
         return res;
     }
 
@@ -121,7 +131,7 @@ public class Logic {
     public ArrayList<Review> getReviews(Hashtable<String, String> params) {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
-        validateParams(REVIEW_PARAMS, setOfParameters);
+        validateParams(REVIEW_SELECT_PARAMS, setOfParameters);
 
         String sql = prepareStatement("SELECT * FROM reviews", setOfParameters);
 
@@ -149,7 +159,7 @@ public class Logic {
     public ArrayList<Reservation> getReservations(Hashtable<String, String> params) {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
-        validateParams(REVIEW_PARAMS, setOfParameters);
+        validateParams(RESERVATION_PARAMS, setOfParameters);
 
         String sql = prepareStatement("SELECT * FROM reservations", setOfParameters);
 
@@ -196,7 +206,9 @@ public class Logic {
 
                 rooms.add(new Room(rnumber, hname, crs.getInt("price"), crs.getInt("beds"), crs.getInt("adults"),
                         crs.getInt("children"), crs.getBoolean("wifi"), crs.getBoolean("breakfast"),
-                        getReservations(tmp)));
+                        //getReservations(tmp)
+                        new ArrayList<Reservation>()
+                        ));
             }
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
@@ -289,7 +301,7 @@ public class Logic {
     public void setReview(Hashtable<String, String> params) {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
-        validateParams(REVIEW_PARAMS, setOfParameters);
+        validateParams(REVIEW_INSERT_PARAMS, setOfParameters);
 
         String sql = prepareStatement("INSERT INTO reviews(", setOfParameters);
         try {
