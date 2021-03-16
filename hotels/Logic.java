@@ -18,7 +18,8 @@ import java.util.Set;
 public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
     private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
-    private final String[] RESERVATION_PARAMS = { "startdate", "enddate", "paid", "contact", "hname", "rnumber" };
+    private final String[] RESERVATION_PARAMS = { "reservationID", "startdate", "enddate", "paid", "contact", "hname",
+            "rnumber" };
     private final String[] REVIEW_SELECT_PARAMS = { "hname", "grade" };
     private final String[] REVIEW_INSERT_PARAMS = { "grade", "hname", "rnumber", "text", "resID" };
 
@@ -336,7 +337,7 @@ public class Logic {
         if (params.containsKey("hname")) {
             resParams.put("hname", params.get("hname"));
         }
-        resParams.put("cancelled","0");
+        resParams.put("cancelled", "0");
 
         ArrayList<Reservation> res = getReservations(resParams, st, e);
         ArrayList<Room> rms = getRooms(params);
@@ -473,26 +474,37 @@ public class Logic {
         }
     }
 
+    /**
+     * Return the reservation if one exists, else throw error
+     * 
+     * @param reservationID the reservation ID to check for
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
+     */
     private Reservation checkIfExists(String reservationID) throws ClassNotFoundException, SQLException, Exception {
-        ArrayList<String> setOfValues = new ArrayList<String>();
-        String check = "SELECT * FROM reservations WHERE reservationID = ?";
+        Hashtable<String, String> tmp = new Hashtable<String, String>();
+        tmp.put("reservationID", reservationID);
 
-        CachedRowSet crs = QueryEngine.query(check, setOfValues);
-        if (crs.size() < 1) {
+        ArrayList<Reservation> res = getReservations(tmp);
+
+        if (res.size() < 1) {
             throw new Exception("Reservation does not exist");
         }
 
-        Reservation r = null;
-
-        while (crs.next()) {
-            r = (new Reservation(crs.getString("reservationID"), crs.getLong("creationDate"), crs.getLong("startDate"),
-                    crs.getLong("endDate"), crs.getBoolean("cancelled"), crs.getBoolean("paid"),
-                    crs.getString("contact"), crs.getString("hname"), crs.getInt("rnumber")));
-        }
-
-        return r;
+        return res.get(0);
     }
 
+    /**
+     * Update the start date of a reservation, if one exists
+     * 
+     * @param reservationID the ID of the reservation to update
+     * @param s             the date to be used as the new start date (in
+     *                      milliseconds)
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
+     */
     public void updateReservationStart(String reservationID, long s)
             throws ClassNotFoundException, SQLException, Exception {
         Reservation r = checkIfExists(reservationID);
@@ -506,14 +518,24 @@ public class Logic {
             QueryEngine.update("UPDATE reservations SET startdate = ? WHERE reservationID = ?", setOfValues);
 
             String sub = "Changed start date for your reservation: " + reservationID;
-            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + " The start of your reservation has successfully been adjusted!"
-                    + System.lineSeparator() + "We hope you enjoy your stay," + System.lineSeparator()
-                    + "The Cluster 8 Hotels Team";
-    
+            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
+                    + " The start of your reservation has successfully been adjusted!" + System.lineSeparator()
+                    + "We hope you enjoy your stay," + System.lineSeparator() + "The Cluster 8 Hotels Team";
+
             EmailEngine.send(r.getContact(), sub, msg);
         }
     }
 
+    /**
+     * Update the end date of a reservation, if one exists
+     * 
+     * @param reservationID the ID of the reservation to update
+     * @param e             the date to be used as the new end date (in
+     *                      milliseconds)
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
+     */
     public void updateReservationEnd(String reservationID, long e)
             throws ClassNotFoundException, SQLException, Exception {
         Reservation r = checkIfExists(reservationID);
@@ -527,14 +549,22 @@ public class Logic {
             QueryEngine.update("UPDATE reservations SET enddate = ? WHERE reservationID = ?", setOfValues);
 
             String sub = "Changed end date for your reservation: " + reservationID;
-            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + " The end of your reservation has successfully been adjusted!"
-                    + System.lineSeparator() + "We hope you enjoy your stay," + System.lineSeparator()
-                    + "The Cluster 8 Hotels Team";
-    
+            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
+                    + " The end of your reservation has successfully been adjusted!" + System.lineSeparator()
+                    + "We hope you enjoy your stay," + System.lineSeparator() + "The Cluster 8 Hotels Team";
+
             EmailEngine.send(r.getContact(), sub, msg);
         }
     }
 
+    /**
+     * Cancel the reservation, if one exists
+     * 
+     * @param reservationID the ID of the reservation to update
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
+     */
     public void cancelReservation(String reservationID) throws ClassNotFoundException, SQLException, Exception {
         Reservation r = checkIfExists(reservationID);
         if (r != null) {
@@ -545,10 +575,10 @@ public class Logic {
             QueryEngine.update("UPDATE reservations SET cancelled = ? WHERE reservationID = ?", setOfValues);
 
             String sub = "Cancellation of your reservation: " + reservationID;
-            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + " Your reservation has been cancelled."
-                    + System.lineSeparator() + "Thank you for your patronage," + System.lineSeparator()
-                    + "The Cluster 8 Hotels Team";
-    
+            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
+                    + " Your reservation has been cancelled." + System.lineSeparator() + "Thank you for your patronage,"
+                    + System.lineSeparator() + "The Cluster 8 Hotels Team";
+
             EmailEngine.send(r.getContact(), sub, msg);
         }
     }
