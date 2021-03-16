@@ -64,15 +64,19 @@ public class Logic {
      * @param valids String[] a complete array of valid parameters.
      * @param params Set<String> the given parameters to be compared.
      */
-    private void validateParams(String[] valids, Set<String> params) {
+    private void validateParams(String[] valids, Set<String> params) throws Exception {
         Set<String> validParams = new HashSet<String>(Arrays.asList(valids));
 
         for (String key : params) {
             if (!validParams.contains(key.toLowerCase())) {
-                System.err.println("Request parameters contain invalid key: " + key);
-                System.exit(1);
+                throw new Exception("Parameters contain invalid key: " + key);
             }
         }
+    }
+
+    private void validateTimeframe(long s, long e) throws Exception {
+        if ((new Date().getTime()) > s || s > e)
+            throw new Exception("Start and end times are invalid");
     }
 
     /**
@@ -132,7 +136,8 @@ public class Logic {
      *               query
      * @return an ArrayList of Review objects that match the parameters
      */
-    public ArrayList<Review> getReviews(Hashtable<String, String> params) {
+    public ArrayList<Review> getReviews(Hashtable<String, String> params)
+            throws ClassNotFoundException, SQLException, Exception {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(REVIEW_SELECT_PARAMS, setOfParameters);
@@ -145,8 +150,8 @@ public class Logic {
             while (crs.next()) {
                 reviews.add(new Review(crs.getInt("grade"), crs.getString("hname"), crs.getString("text")));
             }
-        } catch (SQLException | ClassNotFoundException err) {
-            System.out.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         }
 
         return reviews;
@@ -160,7 +165,8 @@ public class Logic {
      *               query
      * @return an ArrayList of Reservation objects that match the parameters
      */
-    public ArrayList<Reservation> getReservations(Hashtable<String, String> params) {
+    public ArrayList<Reservation> getReservations(Hashtable<String, String> params)
+            throws ClassNotFoundException, SQLException, Exception {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(RESERVATION_PARAMS, setOfParameters);
@@ -176,8 +182,8 @@ public class Logic {
                         crs.getBoolean("paid"), crs.getString("contact"), crs.getString("hname"),
                         crs.getInt("rnumber")));
             }
-        } catch (SQLException | ClassNotFoundException err) {
-            System.out.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         }
 
         return reservations;
@@ -191,7 +197,8 @@ public class Logic {
      *               query
      * @return an ArrayList of Room objects that match the parameters
      */
-    public ArrayList<Room> getRooms(Hashtable<String, String> params) {
+    public ArrayList<Room> getRooms(Hashtable<String, String> params)
+            throws ClassNotFoundException, SQLException, Exception {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(ROOM_PARAMS, setOfParameters);
@@ -213,8 +220,8 @@ public class Logic {
                         // getReservations(tmp)
                         new ArrayList<Reservation>()));
             }
-        } catch (SQLException | ClassNotFoundException err) {
-            System.out.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         }
 
         return rooms;
@@ -228,7 +235,8 @@ public class Logic {
      *               query
      * @return an ArrayList of Hotel objects that match the parameters
      */
-    public ArrayList<Hotel> getHotels(Hashtable<String, String> params) {
+    public ArrayList<Hotel> getHotels(Hashtable<String, String> params)
+            throws ClassNotFoundException, SQLException, Exception {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(HOTEL_PARAMS, setOfParameters);
@@ -246,8 +254,8 @@ public class Logic {
                 hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
                         crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp)));
             }
-        } catch (SQLException | ClassNotFoundException err) {
-            System.out.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         }
 
         return hotels;
@@ -266,7 +274,10 @@ public class Logic {
      * @return an ArrayList of Reservation objects that match the parameters within
      *         the timeframe st - e
      */
-    public ArrayList<Reservation> getReservations(Hashtable<String, String> params, long st, long e) {
+    public ArrayList<Reservation> getReservations(Hashtable<String, String> params, long st, long e)
+            throws ClassNotFoundException, SQLException, Exception {
+        validateTimeframe(st, e);
+
         ArrayList<Reservation> res = getReservations(params);
         ArrayList<Reservation> intersects = new ArrayList<Reservation>();
 
@@ -290,7 +301,10 @@ public class Logic {
      *               milliseconds)
      * @return an ArrayList of Room objects that match the parameters
      */
-    public ArrayList<Room> getRooms(Hashtable<String, String> params, long st, long e) {
+    public ArrayList<Room> getRooms(Hashtable<String, String> params, long st, long e)
+            throws ClassNotFoundException, SQLException, Exception {
+        validateTimeframe(st, e);
+
         Hashtable<String, String> resParams = new Hashtable<String, String>();
 
         if (params.containsKey("hname")) {
@@ -325,7 +339,10 @@ public class Logic {
      *               milliseconds)
      * @return an ArrayList of Hotel objects that match the parameters
      */
-    public ArrayList<Hotel> getHotels(Hashtable<String, String> params, long st, long e) {
+    public ArrayList<Hotel> getHotels(Hashtable<String, String> params, long st, long e)
+            throws ClassNotFoundException, SQLException, Exception {
+        validateTimeframe(st, e);
+
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(HOTEL_PARAMS, setOfParameters);
@@ -344,8 +361,8 @@ public class Logic {
                         crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"),
                         getRooms(tmp, st, e)));
             }
-        } catch (SQLException | ClassNotFoundException err) {
-            System.out.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         }
 
         ArrayList<Hotel> noAvail = new ArrayList<Hotel>();
@@ -364,11 +381,14 @@ public class Logic {
      * 
      * @param params a hashtable of parameter and value pairs to be added to the
      *               query
+     * @throws Exception
      */
-    public void setReservation(Hashtable<String, String> params) {
+    public void setReservation(Hashtable<String, String> params)
+            throws ClassNotFoundException, SQLException, Exception {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(RESERVATION_PARAMS, setOfParameters);
+        validateTimeframe(Long.parseLong(params.get("startdate")), Long.parseLong("enddate"));
 
         String createDate = String.valueOf(new Date().getTime());
         String reservationID = params.get("rnumber") + params.get("hname")
@@ -384,9 +404,8 @@ public class Logic {
         String sql = prepareStatement("INSERT INTO reservations(", setOfParameters);
         try {
             QueryEngine.update(sql, setOfValues);
-        } catch (ClassNotFoundException | SQLException err) {
-            System.out.println(err.getMessage());
-            System.exit(1); // Do not send email if update fails.
+        } catch (Exception err) {
+            throw err;
         }
 
         String sub = "Confirmation for your booking at " + params.get("hname");
@@ -405,8 +424,9 @@ public class Logic {
      * 
      * @param params a hashtable of parameter and value pairs to be added to the
      *               query
+     * @throws Exception
      */
-    public void setReview(Hashtable<String, String> params) {
+    public void setReview(Hashtable<String, String> params) throws ClassNotFoundException, SQLException, Exception {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(REVIEW_INSERT_PARAMS, setOfParameters);
@@ -414,8 +434,8 @@ public class Logic {
         String sql = prepareStatement("INSERT INTO reviews(", setOfParameters);
         try {
             QueryEngine.update(sql, setOfValues);
-        } catch (ClassNotFoundException | SQLException err) {
-            System.out.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         }
     }
 }

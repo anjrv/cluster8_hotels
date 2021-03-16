@@ -28,15 +28,15 @@ class QueryEngine {
      * @return Connection
      * @throws ClassNotFoundException
      */
-    private static Connection connect() throws ClassNotFoundException {
+    private static Connection connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
 
         Connection connection = null;
 
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
-        } catch (SQLException err) {
-            System.err.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         }
 
         return connection;
@@ -88,8 +88,8 @@ class QueryEngine {
             res = factory.createCachedRowSet();
             res.populate(rs);
 
-        } catch (SQLException err) {
-            System.out.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         } finally {
             try {
                 rs.close();
@@ -119,8 +119,8 @@ class QueryEngine {
             }
             statement.executeUpdate();
 
-        } catch (SQLException err) {
-            System.out.println(err.getMessage());
+        } catch (Exception err) {
+            throw err;
         } finally {
             close(connection, statement);
         }
