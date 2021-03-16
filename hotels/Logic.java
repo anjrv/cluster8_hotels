@@ -63,6 +63,7 @@ public class Logic {
      * 
      * @param valids String[] a complete array of valid parameters.
      * @param params Set<String> the given parameters to be compared.
+     * @throws Exception
      */
     private void validateParams(String[] valids, Set<String> params) throws Exception {
         Set<String> validParams = new HashSet<String>(Arrays.asList(valids));
@@ -74,6 +75,13 @@ public class Logic {
         }
     }
 
+    /**
+     * Private helper function to check whether the start and end times are valid
+     * 
+     * @param s long start time in milliseconds
+     * @param e long end time in milliseconds
+     * @throws Exception
+     */
     private void validateTimeframe(long s, long e) throws Exception {
         if ((new Date().getTime()) > s || s > e)
             throw new Exception("Start and end times are invalid");
@@ -135,6 +143,9 @@ public class Logic {
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
      * @return an ArrayList of Review objects that match the parameters
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
      */
     public ArrayList<Review> getReviews(Hashtable<String, String> params)
             throws ClassNotFoundException, SQLException, Exception {
@@ -164,6 +175,9 @@ public class Logic {
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
      * @return an ArrayList of Reservation objects that match the parameters
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
      */
     public ArrayList<Reservation> getReservations(Hashtable<String, String> params)
             throws ClassNotFoundException, SQLException, Exception {
@@ -196,6 +210,9 @@ public class Logic {
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
      * @return an ArrayList of Room objects that match the parameters
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
      */
     public ArrayList<Room> getRooms(Hashtable<String, String> params)
             throws ClassNotFoundException, SQLException, Exception {
@@ -234,6 +251,9 @@ public class Logic {
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
      * @return an ArrayList of Hotel objects that match the parameters
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
      */
     public ArrayList<Hotel> getHotels(Hashtable<String, String> params)
             throws ClassNotFoundException, SQLException, Exception {
@@ -273,6 +293,9 @@ public class Logic {
      *               milliseconds)
      * @return an ArrayList of Reservation objects that match the parameters within
      *         the timeframe st - e
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
      */
     public ArrayList<Reservation> getReservations(Hashtable<String, String> params, long st, long e)
             throws ClassNotFoundException, SQLException, Exception {
@@ -300,6 +323,9 @@ public class Logic {
      * @param e      a long that represents the end date to be used (in
      *               milliseconds)
      * @return an ArrayList of Room objects that match the parameters
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
      */
     public ArrayList<Room> getRooms(Hashtable<String, String> params, long st, long e)
             throws ClassNotFoundException, SQLException, Exception {
@@ -310,6 +336,7 @@ public class Logic {
         if (params.containsKey("hname")) {
             resParams.put("hname", params.get("hname"));
         }
+        resParams.put("cancelled","0");
 
         ArrayList<Reservation> res = getReservations(resParams, st, e);
         ArrayList<Room> rms = getRooms(params);
@@ -338,6 +365,9 @@ public class Logic {
      * @param e      a long that represents the end date to be used (in
      *               milliseconds)
      * @return an ArrayList of Hotel objects that match the parameters
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws Exception
      */
     public ArrayList<Hotel> getHotels(Hashtable<String, String> params, long st, long e)
             throws ClassNotFoundException, SQLException, Exception {
@@ -381,6 +411,8 @@ public class Logic {
      * 
      * @param params a hashtable of parameter and value pairs to be added to the
      *               query
+     * @throws ClassNotFoundException
+     * @throws SQLException
      * @throws Exception
      */
     public void setReservation(Hashtable<String, String> params)
@@ -424,6 +456,8 @@ public class Logic {
      * 
      * @param params a hashtable of parameter and value pairs to be added to the
      *               query
+     * @throws ClassNotFoundException
+     * @throws SQLException
      * @throws Exception
      */
     public void setReview(Hashtable<String, String> params) throws ClassNotFoundException, SQLException, Exception {
@@ -436,6 +470,86 @@ public class Logic {
             QueryEngine.update(sql, setOfValues);
         } catch (Exception err) {
             throw err;
+        }
+    }
+
+    private Reservation checkIfExists(String reservationID) throws ClassNotFoundException, SQLException, Exception {
+        ArrayList<String> setOfValues = new ArrayList<String>();
+        String check = "SELECT * FROM reservations WHERE reservationID = ?";
+
+        CachedRowSet crs = QueryEngine.query(check, setOfValues);
+        if (crs.size() < 1) {
+            throw new Exception("Reservation does not exist");
+        }
+
+        Reservation r = null;
+
+        while (crs.next()) {
+            r = (new Reservation(crs.getString("reservationID"), crs.getLong("creationDate"), crs.getLong("startDate"),
+                    crs.getLong("endDate"), crs.getBoolean("cancelled"), crs.getBoolean("paid"),
+                    crs.getString("contact"), crs.getString("hname"), crs.getInt("rnumber")));
+        }
+
+        return r;
+    }
+
+    public void updateReservationStart(String reservationID, long s)
+            throws ClassNotFoundException, SQLException, Exception {
+        Reservation r = checkIfExists(reservationID);
+        if (r != null) {
+            validateTimeframe(s, r.getEnd());
+
+            ArrayList<String> setOfValues = new ArrayList<String>();
+            setOfValues.add(String.valueOf(s));
+            setOfValues.add(reservationID);
+
+            QueryEngine.update("UPDATE reservations SET startdate = ? WHERE reservationID = ?", setOfValues);
+
+            String sub = "Changed start date for your reservation: " + reservationID;
+            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + " The start of your reservation has successfully been adjusted!"
+                    + System.lineSeparator() + "We hope you enjoy your stay," + System.lineSeparator()
+                    + "The Cluster 8 Hotels Team";
+    
+            EmailEngine.send(r.getContact(), sub, msg);
+        }
+    }
+
+    public void updateReservationEnd(String reservationID, long e)
+            throws ClassNotFoundException, SQLException, Exception {
+        Reservation r = checkIfExists(reservationID);
+        if (r != null) {
+            validateTimeframe(r.getStart(), e);
+
+            ArrayList<String> setOfValues = new ArrayList<String>();
+            setOfValues.add(String.valueOf(e));
+            setOfValues.add(reservationID);
+
+            QueryEngine.update("UPDATE reservations SET enddate = ? WHERE reservationID = ?", setOfValues);
+
+            String sub = "Changed end date for your reservation: " + reservationID;
+            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + " The end of your reservation has successfully been adjusted!"
+                    + System.lineSeparator() + "We hope you enjoy your stay," + System.lineSeparator()
+                    + "The Cluster 8 Hotels Team";
+    
+            EmailEngine.send(r.getContact(), sub, msg);
+        }
+    }
+
+    public void cancelReservation(String reservationID) throws ClassNotFoundException, SQLException, Exception {
+        Reservation r = checkIfExists(reservationID);
+        if (r != null) {
+            ArrayList<String> setOfValues = new ArrayList<String>();
+            setOfValues.add("1");
+            setOfValues.add(reservationID);
+
+            QueryEngine.update("UPDATE reservations SET cancelled = ? WHERE reservationID = ?", setOfValues);
+
+            String sub = "Cancellation of your reservation: " + reservationID;
+            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + " Your reservation has been cancelled."
+                    + System.lineSeparator() + "Thank you for your patronage," + System.lineSeparator()
+                    + "The Cluster 8 Hotels Team";
+    
+            EmailEngine.send(r.getContact(), sub, msg);
         }
     }
 }

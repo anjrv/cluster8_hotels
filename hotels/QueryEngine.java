@@ -27,6 +27,7 @@ class QueryEngine {
      * 
      * @return Connection
      * @throws ClassNotFoundException
+     * @throws SQLException
      */
     private static Connection connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
@@ -69,6 +70,7 @@ class QueryEngine {
      * @param vals values to be inserted into the given query
      * @return CachedRowSet cached rows from the result of the performed query
      * @throws ClassNotFoundException
+     * @throws SQLException
      */
     static CachedRowSet query(String sql, ArrayList<String> vals) throws ClassNotFoundException, SQLException {
         Connection connection = null;
@@ -106,6 +108,7 @@ class QueryEngine {
      * @param sql  SQL query string to be executed
      * @param vals values to be inserted into the given query
      * @throws ClassNotFoundException
+     * @throws SQLException
      */
     static void update(String sql, ArrayList<String> vals) throws ClassNotFoundException, SQLException {
         Connection connection = null;
