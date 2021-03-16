@@ -206,9 +206,8 @@ public class Logic {
 
                 rooms.add(new Room(rnumber, hname, crs.getInt("price"), crs.getInt("beds"), crs.getInt("adults"),
                         crs.getInt("children"), crs.getBoolean("wifi"), crs.getBoolean("breakfast"),
-                        //getReservations(tmp)
-                        new ArrayList<Reservation>()
-                        ));
+                        // getReservations(tmp)
+                        new ArrayList<Reservation>()));
             }
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
@@ -247,6 +246,110 @@ public class Logic {
             System.out.println(e.getMessage());
         }
 
+        return hotels;
+    }
+
+    /**
+     * Creates an ArrayList of reservations based on the current state of the
+     * database, the start and end date and the parameters provided by the argument.
+     *
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
+     * @param st     a long that represents the start date to be used (in
+     *               milliseconds)
+     * @param e      a long that represents the end date to be used (in
+     *               milliseconds)
+     * @return an ArrayList of Reservation objects that match the parameters within
+     *         the timeframe st - e
+     */
+    public ArrayList<Reservation> getReservations(Hashtable<String, String> params, long st, long e) {
+        ArrayList<Reservation> res = getReservations(params);
+        ArrayList<Reservation> intersects = new ArrayList<Reservation>();
+
+        for (Reservation r : res) {
+            if ((r.getStart() > st && e > r.getStart()) || (r.getEnd() > st && e > r.getEnd()))
+                intersects.add(r);
+        }
+
+        return intersects;
+    }
+
+    /**
+     * Creates an ArrayList of rooms based on the current state of the database, the
+     * start and end date and the parameters provided by the argument.
+     * 
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
+     * @param st     a long that represents the start date to be used (in
+     *               milliseconds)
+     * @param e      a long that represents the end date to be used (in
+     *               milliseconds)
+     * @return an ArrayList of Room objects that match the parameters
+     */
+    public ArrayList<Room> getRooms(Hashtable<String, String> params, long st, long e) {
+        Hashtable<String, String> resParams = new Hashtable<String, String>();
+
+        if (params.containsKey("hname")) {
+            resParams.put("hname", params.get("hname"));
+        }
+
+        ArrayList<Reservation> res = getReservations(resParams, st, e);
+        ArrayList<Room> rms = getRooms(params);
+        ArrayList<Room> reserved = new ArrayList<Room>();
+
+        for (Reservation rs : res) {
+            for (Room rm : rms) {
+                if ((rm.getHname().equals(rs.getHname())) && rm.getRnumber() == rs.getRnumber())
+                    reserved.add(rm);
+            }
+        }
+
+        rms.removeAll(reserved);
+
+        return rms;
+    }
+
+    /**
+     * Creates an ArrayList of hotels based on the current state of the database,
+     * the start and end date and the parameters provided by the argument.
+     * 
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
+     * @param st     a long that represents the start date to be used (in
+     *               milliseconds)
+     * @param e      a long that represents the end date to be used (in
+     *               milliseconds)
+     * @return an ArrayList of Hotel objects that match the parameters
+     */
+    public ArrayList<Hotel> getHotels(Hashtable<String, String> params, long st, long e) {
+        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
+        Set<String> setOfParameters = params.keySet();
+        validateParams(HOTEL_PARAMS, setOfParameters);
+
+        String sql = prepareStatement("SELECT * FROM hotels", setOfParameters);
+
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+        try {
+            CachedRowSet crs = QueryEngine.query(sql, setOfValues);
+            while (crs.next()) {
+                String hname = crs.getString("name");
+                Hashtable<String, String> tmp = new Hashtable<String, String>();
+                tmp.put("hname", hname);
+
+                hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
+                        crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp, st, e)));
+            }
+        } catch (SQLException | ClassNotFoundException err) {
+            System.out.println(err.getMessage());
+        }
+
+        ArrayList<Hotel> noAvail = new ArrayList<Hotel>();
+        for(Hotel h : hotels) {
+            if(h.getRooms().size() == 0)
+                noAvail.add(h);
+        }
+
+        hotels.removeAll(noAvail);
         return hotels;
     }
 
@@ -310,7 +413,4 @@ public class Logic {
             System.out.println(e.getMessage());
         }
     }
-
-    // TODO: Alternative method times when given a timeframe e.g.
-    // getHotels(Hashtable>String, String> params, long start, long end) ...
 }
