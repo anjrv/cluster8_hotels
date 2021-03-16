@@ -57,6 +57,7 @@ public class Demo {
             Hashtable<String, String> roomParams = new Hashtable<String, String>();
             roomParams.put("wifi","1");
             roomParams.put("adults","1");
+            roomParams.put("price","31000");
 
             ArrayList<Room> rooms2 = bn.getRooms(roomParams);
 

@@ -92,7 +92,11 @@ public class Logic {
                 sql += " WHERE ";
                 int i = 1;
                 for (String key : setOfParameters) {
-                    sql += key + " = ? ";
+                    if (key.equals("price")) {
+                        sql += key + " <= ? ";
+                    } else {
+                        sql += key + " = ? ";
+                    }
                     if (i != setOfParameters.size())
                         sql += "AND ";
                     i++;

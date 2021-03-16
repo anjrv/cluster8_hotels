@@ -78,14 +78,14 @@ public class Setup {
             }
             read.close();
 
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
+        } catch (SQLException err) {
+            System.err.println(err.getMessage());
         } finally {
             try {
                 if (connection != null)
                     connection.close();
-            } catch (SQLException e) {
-                System.err.println(e);
+            } catch (SQLException err) {
+                System.err.println(err);
             }
         }
     }
