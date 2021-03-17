@@ -421,7 +421,7 @@ public class Logic {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(RESERVATION_PARAMS, setOfParameters);
-        validateTimeframe(Long.parseLong(params.get("startdate")), Long.parseLong("enddate"));
+        validateTimeframe(Long.parseLong(params.get("startdate")), Long.parseLong(params.get("enddate")));
 
         String createDate = String.valueOf(new Date().getTime());
         String reservationID = params.get("rnumber") + params.get("hname")
