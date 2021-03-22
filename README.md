@@ -14,6 +14,14 @@ hoteldeps.jar located in the root of the project contains dependencies for the J
 
 Setup process will create the required database and populate it according to the information within the included schema.sql script.
 
+**Test cases can be run:**
+* Compile tests:
+    - On Windows: `javac -cp ".;testing.jar" RunTests.java`
+    - On UNIX/Mac: `javac -cp .:testing.jar RunTests.java`
+* Run test cases:
+    - On Windows: `java -cp ".;testing.jar;hoteldeps.jar" org.junit.runner.JUnitCore RunTests`
+    - On UNIX/Mac: `java -cp .:testing.jar:hoteldeps.jar org.junit.runner.JUnitCore RunTests`
+
 **A short demo class that provides an example of interface connection:**
 * Compile required class file with `javac Demo.java`
 * Run with:
