@@ -12,6 +12,8 @@ import hotels.Reservation;
 import hotels.Setup;
 
 public class RunTests {
+    private Logic hotelLogic = new Logic();
+
     @BeforeClass
     public static void setup() {
         File real = new File("hotels/hotels.db");
@@ -29,15 +31,16 @@ public class RunTests {
     }
 
     @Test
-    public void fillerTest() {
-        System.out.println("1");
-        assertEquals(1, 1);
-    }
-
-    @Test
-    public void fillerTest2() {
-        System.out.println("2");
-        assertEquals(2, 2);
+    public void hotelRegionTest() {
+        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
+        hotelParams.put("Region", "0");
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+        try {
+            hotels = hotelLogic.getHotels(hotelParams);
+        } catch (Exception e) {
+            System.err.println("Hotel region test error: " + e);
+        }
+        assertEquals(hotels.size(), 1);
     }
 
     @AfterClass
