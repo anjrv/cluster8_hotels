@@ -44,11 +44,10 @@ public class Setup {
      * In order to not overwrite information that already exists the program will
      * exit if any existing database or tables are detected.
      * 
-     * @param args
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void setup() throws IOException, ClassNotFoundException {
         initDB();
 
         Class.forName("org.sqlite.JDBC");
@@ -88,5 +87,9 @@ public class Setup {
                 System.err.println(err);
             }
         }
+    }
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        setup();
     }
 }

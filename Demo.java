@@ -13,6 +13,10 @@ import hotels.Room;
  */
 public class Demo {
 
+    public static void setup() {
+
+    }
+
     /**
      * In this case we query for hotels and iterate through the resulting ArrayList
      * where we use the Hotel.getName() method to print out the name of each
