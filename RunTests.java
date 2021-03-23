@@ -26,7 +26,7 @@ public class RunTests {
         try {
             Setup.setup();
         } catch (Exception e) {
-            // Solve
+            System.err.println("Problem with database setup: " + e);
         }
     }
 
@@ -40,6 +40,7 @@ public class RunTests {
         } catch (Exception e) {
             System.err.println("Hotel region test error: " + e);
         }
+
         assertEquals(hotels.size(), 1);
     }
 
