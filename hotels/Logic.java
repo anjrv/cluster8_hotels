@@ -133,6 +133,7 @@ public class Logic {
             res += sql + vals + ")";
         }
 
+        // Debug print.
         System.out.println(res);
         return res;
     }
@@ -144,12 +145,9 @@ public class Logic {
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
      * @return an ArrayList of Review objects that match the parameters
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public ArrayList<Review> getReviews(Hashtable<String, String> params)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public ArrayList<Review> getReviews(Hashtable<String, String> params) throws IllegalArgumentException {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(REVIEW_SELECT_PARAMS, setOfParameters);
@@ -162,8 +160,8 @@ public class Logic {
             while (crs.next()) {
                 reviews.add(new Review(crs.getInt("grade"), crs.getString("hname"), crs.getString("text")));
             }
-        } catch (Exception err) {
-            throw err;
+        } catch (SQLException err) {
+            System.err.println(err);
         }
 
         return reviews;
@@ -176,12 +174,9 @@ public class Logic {
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
      * @return an ArrayList of Reservation objects that match the parameters
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public ArrayList<Reservation> getReservations(Hashtable<String, String> params)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public ArrayList<Reservation> getReservations(Hashtable<String, String> params) throws IllegalArgumentException {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(RESERVATION_PARAMS, setOfParameters);
@@ -197,8 +192,8 @@ public class Logic {
                         crs.getBoolean("paid"), crs.getString("contact"), crs.getString("hname"),
                         crs.getInt("rnumber")));
             }
-        } catch (Exception err) {
-            throw err;
+        } catch (SQLException err) {
+            System.err.println(err);
         }
 
         return reservations;
@@ -211,12 +206,9 @@ public class Logic {
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
      * @return an ArrayList of Room objects that match the parameters
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public ArrayList<Room> getRooms(Hashtable<String, String> params)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public ArrayList<Room> getRooms(Hashtable<String, String> params) throws IllegalArgumentException {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(ROOM_PARAMS, setOfParameters);
@@ -235,11 +227,10 @@ public class Logic {
 
                 rooms.add(new Room(rnumber, hname, crs.getInt("price"), crs.getInt("beds"), crs.getInt("adults"),
                         crs.getInt("children"), crs.getBoolean("wifi"), crs.getBoolean("breakfast"),
-                        // getReservations(tmp)
-                        new ArrayList<Reservation>()));
+                        getReservations(tmp)));
             }
-        } catch (Exception err) {
-            throw err;
+        } catch (SQLException err) {
+            System.err.println(err);
         }
 
         return rooms;
@@ -252,12 +243,9 @@ public class Logic {
      * @param params a Hashtable of parameter and value pairs to be added to the
      *               query
      * @return an ArrayList of Hotel objects that match the parameters
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public ArrayList<Hotel> getHotels(Hashtable<String, String> params)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public ArrayList<Hotel> getHotels(Hashtable<String, String> params) throws IllegalArgumentException {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(HOTEL_PARAMS, setOfParameters);
@@ -275,8 +263,8 @@ public class Logic {
                 hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
                         crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp)));
             }
-        } catch (Exception err) {
-            throw err;
+        } catch (SQLException err) {
+            System.err.println(err);
         }
 
         return hotels;
@@ -294,12 +282,10 @@ public class Logic {
      *               milliseconds)
      * @return an ArrayList of Reservation objects that match the parameters within
      *         the timeframe st - e
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
     public ArrayList<Reservation> getReservations(Hashtable<String, String> params, long st, long e)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+            throws IllegalArgumentException {
         validateTimeframe(st, e);
 
         ArrayList<Reservation> res = getReservations(params);
@@ -324,12 +310,9 @@ public class Logic {
      * @param e      a long that represents the end date to be used (in
      *               milliseconds)
      * @return an ArrayList of Room objects that match the parameters
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public ArrayList<Room> getRooms(Hashtable<String, String> params, long st, long e)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public ArrayList<Room> getRooms(Hashtable<String, String> params, long st, long e) throws IllegalArgumentException {
         validateTimeframe(st, e);
 
         Hashtable<String, String> resParams = new Hashtable<String, String>();
@@ -366,12 +349,10 @@ public class Logic {
      * @param e      a long that represents the end date to be used (in
      *               milliseconds)
      * @return an ArrayList of Hotel objects that match the parameters
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
     public ArrayList<Hotel> getHotels(Hashtable<String, String> params, long st, long e)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+            throws IllegalArgumentException {
         validateTimeframe(st, e);
 
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
@@ -392,8 +373,8 @@ public class Logic {
                         crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"),
                         getRooms(tmp, st, e)));
             }
-        } catch (Exception err) {
-            throw err;
+        } catch (SQLException err) {
+            System.err.println(err);
         }
 
         ArrayList<Hotel> noAvail = new ArrayList<Hotel>();
@@ -412,12 +393,9 @@ public class Logic {
      * 
      * @param params a hashtable of parameter and value pairs to be added to the
      *               query
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public void setReservation(Hashtable<String, String> params)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public void setReservation(Hashtable<String, String> params) throws IllegalArgumentException {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(RESERVATION_PARAMS, setOfParameters);
@@ -435,11 +413,7 @@ public class Logic {
         setOfValues.add("0");
 
         String sql = prepareStatement("INSERT INTO reservations(", setOfParameters);
-        try {
-            QueryEngine.update(sql, setOfValues);
-        } catch (Exception err) {
-            throw err;
-        }
+        QueryEngine.update(sql, setOfValues);
 
         String sub = "Confirmation for your booking at " + params.get("hname");
         String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + "Thank you for booking with "
@@ -457,32 +431,25 @@ public class Logic {
      * 
      * @param params a hashtable of parameter and value pairs to be added to the
      *               query
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public void setReview(Hashtable<String, String> params) throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public void setReview(Hashtable<String, String> params) throws IllegalArgumentException {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(REVIEW_INSERT_PARAMS, setOfParameters);
 
         String sql = prepareStatement("INSERT INTO reviews(", setOfParameters);
-        try {
-            QueryEngine.update(sql, setOfValues);
-        } catch (Exception err) {
-            throw err;
-        }
+        QueryEngine.update(sql, setOfValues);
     }
 
     /**
      * Return the reservation if one exists, else throw error
      * 
      * @param reservationID the reservation ID to check for
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * 
      * @throws IllegalArgumentException
      */
-    private Reservation checkIfExists(String reservationID) throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    private Reservation checkIfExists(String reservationID) throws IllegalArgumentException {
         Hashtable<String, String> tmp = new Hashtable<String, String>();
         tmp.put("reservationID", reservationID);
 
@@ -501,12 +468,9 @@ public class Logic {
      * @param reservationID the ID of the reservation to update
      * @param s             the date to be used as the new start date (in
      *                      milliseconds)
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public void updateReservationStart(String reservationID, long s)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public void updateReservationStart(String reservationID, long s) throws IllegalArgumentException {
         Reservation r = checkIfExists(reservationID);
         if (r != null) {
             validateTimeframe(s, r.getEnd());
@@ -532,12 +496,9 @@ public class Logic {
      * @param reservationID the ID of the reservation to update
      * @param e             the date to be used as the new end date (in
      *                      milliseconds)
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public void updateReservationEnd(String reservationID, long e)
-            throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public void updateReservationEnd(String reservationID, long e) throws IllegalArgumentException {
         Reservation r = checkIfExists(reservationID);
         if (r != null) {
             validateTimeframe(r.getStart(), e);
@@ -561,11 +522,9 @@ public class Logic {
      * Cancel the reservation, if one exists
      * 
      * @param reservationID the ID of the reservation to update
-     * @throws ClassNotFoundException
-     * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public void cancelReservation(String reservationID) throws ClassNotFoundException, SQLException, IllegalArgumentException {
+    public void cancelReservation(String reservationID) throws IllegalArgumentException {
         Reservation r = checkIfExists(reservationID);
         if (r != null) {
             ArrayList<String> setOfValues = new ArrayList<String>();

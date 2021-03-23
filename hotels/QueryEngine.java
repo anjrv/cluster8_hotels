@@ -27,17 +27,16 @@ class QueryEngine {
      * 
      * @return Connection
      * @throws ClassNotFoundException
-     * @throws SQLException
      */
-    private static Connection connect() throws ClassNotFoundException, SQLException {
+    private static Connection connect() throws ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
 
         Connection connection = null;
 
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_PATH);
-        } catch (Exception err) {
-            throw err;
+        } catch (SQLException err) {
+            System.err.println(err);
         }
 
         return connection;
@@ -69,10 +68,8 @@ class QueryEngine {
      * @param sql  SQL query string to be executed
      * @param vals values to be inserted into the given query
      * @return CachedRowSet cached rows from the result of the performed query
-     * @throws ClassNotFoundException
-     * @throws SQLException
      */
-    static CachedRowSet query(String sql, ArrayList<String> vals) throws ClassNotFoundException, SQLException {
+    static CachedRowSet query(String sql, ArrayList<String> vals) {
         Connection connection = null;
         PreparedStatement statement = null;
         CachedRowSet res = null;
@@ -91,7 +88,7 @@ class QueryEngine {
             res.populate(rs);
 
         } catch (Exception err) {
-            throw err;
+            System.err.println(err);
         } finally {
             try {
                 rs.close();
@@ -107,10 +104,8 @@ class QueryEngine {
      * 
      * @param sql  SQL query string to be executed
      * @param vals values to be inserted into the given query
-     * @throws ClassNotFoundException
-     * @throws SQLException
      */
-    static void update(String sql, ArrayList<String> vals) throws ClassNotFoundException, SQLException {
+    static void update(String sql, ArrayList<String> vals) {
         Connection connection = null;
         PreparedStatement statement = null;
 
@@ -123,7 +118,7 @@ class QueryEngine {
             statement.executeUpdate();
 
         } catch (Exception err) {
-            throw err;
+            System.err.println(err);
         } finally {
             close(connection, statement);
         }

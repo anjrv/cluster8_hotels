@@ -41,7 +41,7 @@ public class RunTests {
             System.err.println("Hotel region test error: " + e);
         }
 
-        assertEquals(hotels.size(), 1);
+        assertEquals(hotels.size(), 2);
     }
 
     @AfterClass
