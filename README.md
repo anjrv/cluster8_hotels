@@ -16,8 +16,8 @@ Setup process will create the required database and populate it according to the
 
 **Test cases can be run:**
 * Compile tests:
-    - On Windows: `javac -cp ".;testing.jar" RunTests.java`
-    - On UNIX/Mac: `javac -cp .:testing.jar RunTests.java`
+    - On Windows: `javac -cp ".;testing.jar;hoteldeps.jar" RunTests.java`
+    - On UNIX/Mac: `javac -cp .:testing.jar:hoteldeps.jar RunTests.java`
 * Run test cases:
     - On Windows: `java -cp ".;testing.jar;hoteldeps.jar" org.junit.runner.JUnitCore RunTests`
     - On UNIX/Mac: `java -cp .:testing.jar:hoteldeps.jar org.junit.runner.JUnitCore RunTests`
