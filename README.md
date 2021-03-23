@@ -3,6 +3,8 @@
 **Required dependencies:**
 \
 hoteldeps.jar located in the root of the project contains dependencies for the JDBC driver as well as mail and activation drivers that provide email features. It is required to compile the email engine and is required by both the email engine and query engine at runtime.
+\
+testing.jar located in the root of the project contains dependencies for JUnit and hamcrest. It is required to compile and run test cases.
 
 **Initial setup done by:**
 * Compile required class:
