@@ -133,8 +133,6 @@ public class Logic {
             res += sql + vals + ")";
         }
 
-        // Debug print.
-        System.out.println(res);
         return res;
     }
 
@@ -403,7 +401,7 @@ public class Logic {
         validateTimeframe(Long.parseLong(params.get("startdate")), Long.parseLong(params.get("enddate")));
 
         String createDate = String.valueOf(new Date().getTime());
-        String reservationID = params.get("rnumber") + params.get("hname")
+        String reservationID = params.get("rnumber") + params.get("hname").replaceAll("\\s","")
                 + createDate.substring(createDate.length() - 6);
 
         setOfParameters.add("reservationID");

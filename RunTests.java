@@ -40,112 +40,111 @@ public class RunTests {
     }
 
     @Test
-    public void getHotelRegionTest() {
+    public void getHotelInjectionTest() throws Exception {
+        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
+        hotelParams.put("name", "Bates Motel; DROP TABLE hotels");
+        
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
+
+        assertEquals(hotels.size(), 0);
+    }
+
+    @Test
+    public void getHotelRegionTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("Region", "0");
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        try {
-            hotels = hotelLogic.getHotels(hotelParams);
-        } catch (Exception e) {
-            System.err.println("Hotel region test error: " + e);
-        }
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
         assertEquals(hotels.size(), 2);
     }
 
     @Test
-    public void getHotelAddressTest() {
+    public void getHotelAddressTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("Address", "1054 272nd Street");
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        try {
-            hotels = hotelLogic.getHotels(hotelParams);
-        } catch (Exception e) {
-            System.err.println("Hotel address test error: " + e);
-        }
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
         assertEquals(hotels.get(0).getName(), "Bates Motel");
     }
 
     @Test
-    public void getHotelAccessibilityTest() {
+    public void getHotelAccessibilityTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("Accessibility", "1");
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        try {
-            hotels = hotelLogic.getHotels(hotelParams);
-        } catch (Exception e) {
-            System.err.println("Hotel accessibility test error: " + e);
-        }
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
         assertEquals(hotels.size(), 4);
     }
 
     @Test
-    public void getHotelGymTest() {
+    public void getHotelGymTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("Gym", "1");
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        try {
-            hotels = hotelLogic.getHotels(hotelParams);
-        } catch (Exception e) {
-            System.err.println("Hotel gym test error: " + e);
-        }
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
         assertEquals(hotels.size(), 3);
     }
 
     @Test
-    public void getHotelSpaTest() {
+    public void getHotelSpaTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("Spa", "1");
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        try {
-            hotels = hotelLogic.getHotels(hotelParams);
-        } catch (Exception e) {
-            System.err.println("Hotel spa test error: " + e);
-        }
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
         assertEquals(hotels.size(), 7);
     }
 
     @Test
-    public void getHotelMultipleParams() {
+    public void getHotelMultipleParametersTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("accessibility", "1");
         hotelParams.put("gym", "1");
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        try {
-            hotels = hotelLogic.getHotels(hotelParams);
-        } catch (Exception e) {
-            System.err.println("Hotel multiples test error: " + e);
-        }
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
         assertEquals(hotels.size(), 2);
     }
 
     @Test
-    public void getHotelEmptyParams() {
+    public void getHotelEmptyParametersTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
 
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        try {
-            hotels = hotelLogic.getHotels(hotelParams);
-        } catch (Exception e) {
-            System.err.println("Hotel no parameters test error: " + e);
-        }
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
         assertEquals(hotels.size(), 8);
     }
 
+    @Test
+    public void getHotelNonExistantValueTest() throws Exception {
+        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
+        hotelParams.put("name", "Banana");
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
+
+        assertEquals(hotels.size(), 0);
+    }
+
+    @Test
+    public void getHotelInvalidValueTest() throws Exception {
+        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
+        hotelParams.put("gym", "Cheese");
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
+
+        assertEquals(hotels.size(), 0);
+    }
+
     @Test(expected = IllegalArgumentException.class)
-    public void getHotelInvalidParams() throws Exception {
+    public void getHotelInvalidKeyTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("Cheese", "Yes");
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        
-        // Let error throw up
-        hotels = hotelLogic.getHotels(hotelParams);
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
     }
 
     @AfterClass
