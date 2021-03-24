@@ -40,16 +40,6 @@ public class RunTests {
     }
 
     @Test
-    public void getHotelInjectionTest() throws Exception {
-        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
-        hotelParams.put("name", "Bates Motel; DROP TABLE hotels");
-        
-        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
-
-        assertEquals(0, hotels.size());
-    }
-
-    @Test
     public void getHotelNameTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("name", "The Plaza Hotel");
