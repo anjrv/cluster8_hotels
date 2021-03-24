@@ -124,12 +124,27 @@ public class RunTests {
         assertEquals(hotels.size(), 2);
     }
 
+    @Test
+    public void getHotelEmptyParams() {
+        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
+
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+        try {
+            hotels = hotelLogic.getHotels(hotelParams);
+        } catch (Exception e) {
+            System.err.println("Hotel no parameters test error: " + e);
+        }
+
+        assertEquals(hotels.size(), 8);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void getHotelInvalidParams() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("Cheese", "Yes");
         ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        // Cannot try catch, will not throw.
+        
+        // Let error throw up
         hotels = hotelLogic.getHotels(hotelParams);
     }
 
@@ -137,7 +152,7 @@ public class RunTests {
     public static void cleanup() {
         // Delete dummy
         // Restore existing database if there was one
-        
+
         File fake = new File("hotels/hotels.db");
         File real = new File("hotels/saved_hotels.db");
 
