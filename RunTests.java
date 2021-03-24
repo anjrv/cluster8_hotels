@@ -50,6 +50,16 @@ public class RunTests {
     }
 
     @Test
+    public void getHotelNameTest() throws Exception {
+        Hashtable<String, String> hotelParams = new Hashtable<String, String>();
+        hotelParams.put("name", "The Plaza Hotel");
+
+        ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
+
+        assertEquals(1, hotels.size());
+    }
+
+    @Test
     public void getHotelRegionTest() throws Exception {
         Hashtable<String, String> hotelParams = new Hashtable<String, String>();
         hotelParams.put("Region", "0");
