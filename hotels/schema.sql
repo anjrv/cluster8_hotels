@@ -47,7 +47,7 @@ CREATE TABLE REVIEWS (
     , FOREIGN KEY(Hname,Rnumber) REFERENCES ROOMS(Hname,Rnumber)
 );
 
-INSERT INTO HOTELS VALUES('The Plaza Hotel',0,'768 Fifth Avenue','plaza.jpg',1,1,1);
+INSERT INTO HOTELS VALUES('The Plaza Hotel',0,'768 Fifth Avenue','plaza.jpg',0,1,1);
 INSERT INTO HOTELS VALUES('Bates Motel',0,'1054 272nd Street','bates.jpg',0,0,0);
 INSERT INTO HOTELS VALUES('Park Hyatt',1,'3 Chome-7-1-2 Nishishinjuku','hyatt.jpg',1,1,1);
 INSERT INTO HOTELS VALUES('The Overlook Hotel',2,'333 E Wonderview Ave','overlook.jpg',0,0,1);

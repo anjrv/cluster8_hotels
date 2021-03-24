@@ -393,9 +393,10 @@ public class Logic {
      * 
      * @param params a hashtable of parameter and value pairs to be added to the
      *               query
+     * @return the reservation ID for the reservation
      * @throws IllegalArgumentException
      */
-    public void setReservation(Hashtable<String, String> params) throws IllegalArgumentException {
+    public String setReservation(Hashtable<String, String> params) throws IllegalArgumentException {
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(RESERVATION_PARAMS, setOfParameters);
@@ -423,6 +424,8 @@ public class Logic {
                 + "The Cluster 8 Hotels Team";
 
         EmailEngine.send(params.get("contact"), sub, msg);
+
+        return reservationID;
     }
 
     /**
