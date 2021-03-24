@@ -46,7 +46,7 @@ public class RunTests {
         
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 0);
+        assertEquals(0, hotels.size());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 2);
+        assertEquals(2, hotels.size());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.get(0).getName(), "Bates Motel");
+        assertEquals("Bates Motel", hotels.get(0).getName());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 4);
+        assertEquals(4, hotels.size());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 3);
+        assertEquals(3, hotels.size());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 7);
+        assertEquals(7, hotels.size());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 2);
+        assertEquals(2, hotels.size());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 8);
+        assertEquals(8, hotels.size());
     }
 
     @Test
@@ -126,7 +126,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 0);
+        assertEquals(0, hotels.size());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class RunTests {
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
 
-        assertEquals(hotels.size(), 0);
+        assertEquals(0, hotels.size());
     }
 
     @Test(expected = IllegalArgumentException.class)
