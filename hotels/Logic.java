@@ -105,7 +105,7 @@ public class Logic {
                 sql += " WHERE ";
                 int i = 1;
                 for (String key : setOfParameters) {
-                    if (key.equals("price")) {
+                    if (key.toLowerCase().equals("price")) {
                         sql += key + " <= ? ";
                     } else {
                         sql += key + " = ? ";
@@ -198,6 +198,35 @@ public class Logic {
     }
 
     /**
+     * Creates an ArrayList of reservations based on the current state of the
+     * database, the start and end date and the parameters provided by the argument.
+     *
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
+     * @param st     a long that represents the start date to be used (in
+     *               milliseconds)
+     * @param e      a long that represents the end date to be used (in
+     *               milliseconds)
+     * @return an ArrayList of Reservation objects that match the parameters within
+     *         the timeframe st - e
+     * @throws IllegalArgumentException
+     */
+    public ArrayList<Reservation> getReservations(Hashtable<String, String> params, long st, long e)
+            throws IllegalArgumentException {
+        validateTimeframe(st, e);
+
+        ArrayList<Reservation> res = getReservations(params);
+        ArrayList<Reservation> intersects = new ArrayList<Reservation>();
+
+        for (Reservation r : res) {
+            if ((r.getStart() > st && e > r.getStart()) || (r.getEnd() > st && e > r.getEnd()))
+                intersects.add(r);
+        }
+
+        return intersects;
+    }
+
+    /**
      * Creates an ArrayList of rooms based on the current state of the database and
      * the parameters provided by the argument.
      * 
@@ -232,69 +261,6 @@ public class Logic {
         }
 
         return rooms;
-    }
-
-    /**
-     * Creates an ArrayList of hotels based on the current state of the database and
-     * the parameters provided by the argument.
-     * 
-     * @param params a Hashtable of parameter and value pairs to be added to the
-     *               query
-     * @return an ArrayList of Hotel objects that match the parameters
-     * @throws IllegalArgumentException
-     */
-    public ArrayList<Hotel> getHotels(Hashtable<String, String> params) throws IllegalArgumentException {
-        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
-        Set<String> setOfParameters = params.keySet();
-        validateParams(HOTEL_PARAMS, setOfParameters);
-
-        String sql = prepareStatement("SELECT * FROM hotels", setOfParameters);
-
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        try {
-            CachedRowSet crs = QueryEngine.query(sql, setOfValues);
-            while (crs.next()) {
-                String hname = crs.getString("name");
-                Hashtable<String, String> tmp = new Hashtable<String, String>();
-                tmp.put("hname", hname);
-
-                hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
-                        crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp)));
-            }
-        } catch (SQLException err) {
-            System.err.println(err);
-        }
-
-        return hotels;
-    }
-
-    /**
-     * Creates an ArrayList of reservations based on the current state of the
-     * database, the start and end date and the parameters provided by the argument.
-     *
-     * @param params a Hashtable of parameter and value pairs to be added to the
-     *               query
-     * @param st     a long that represents the start date to be used (in
-     *               milliseconds)
-     * @param e      a long that represents the end date to be used (in
-     *               milliseconds)
-     * @return an ArrayList of Reservation objects that match the parameters within
-     *         the timeframe st - e
-     * @throws IllegalArgumentException
-     */
-    public ArrayList<Reservation> getReservations(Hashtable<String, String> params, long st, long e)
-            throws IllegalArgumentException {
-        validateTimeframe(st, e);
-
-        ArrayList<Reservation> res = getReservations(params);
-        ArrayList<Reservation> intersects = new ArrayList<Reservation>();
-
-        for (Reservation r : res) {
-            if ((r.getStart() > st && e > r.getStart()) || (r.getEnd() > st && e > r.getEnd()))
-                intersects.add(r);
-        }
-
-        return intersects;
     }
 
     /**
@@ -334,6 +300,98 @@ public class Logic {
         rms.removeAll(reserved);
 
         return rms;
+    }
+
+    /**
+     * Creates an ArrayList of hotels based on the current state of the database and
+     * the parameters provided by the argument.
+     * 
+     * @param params a Hashtable of parameter and value pairs to be added to the
+     *               query
+     * @return an ArrayList of Hotel objects that match the parameters
+     * @throws IllegalArgumentException
+     */
+    public ArrayList<Hotel> getHotels(Hashtable<String, String> params) throws IllegalArgumentException {
+        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
+        Set<String> setOfParameters = params.keySet();
+        validateParams(HOTEL_PARAMS, setOfParameters);
+
+        String sql = prepareStatement("SELECT * FROM hotels", setOfParameters);
+
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+        try {
+            CachedRowSet crs = QueryEngine.query(sql, setOfValues);
+            while (crs.next()) {
+                String hname = crs.getString("name");
+                Hashtable<String, String> tmp = new Hashtable<String, String>();
+                tmp.put("hname", hname);
+
+                hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
+                        crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp)));
+            }
+        } catch (SQLException err) {
+            System.err.println(err);
+        }
+
+        return hotels;
+    }
+
+    /**
+     * Creates an ArrayList of hotels based on the current state of the database.
+     * 
+     * @return an ArrayList of Hotel objects that match the parameters
+     * @throws IllegalArgumentException
+     */
+    public ArrayList<Hotel> getHotels() throws IllegalArgumentException {
+        Hashtable<String, String> tmp = new Hashtable<String, String>();
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+
+        hotels = getHotels(tmp);
+        return hotels;
+    }
+
+    /**
+     * Creates an ArrayList of hotels based on the current state of the database and
+     * the parameters provided by the argument.
+     * 
+     * @param params     a Hashtable of parameter and value pairs to be added to the
+     *                   query
+     * @param roomParams a Hashtable of parameter and value pairs to be used to
+     *                   query rooms
+     * @return an ArrayList of Hotel objects that match the parameters
+     * @throws IllegalArgumentException
+     */
+    public ArrayList<Hotel> getHotels(Hashtable<String, String> params, Hashtable<String, String> roomParams)
+            throws IllegalArgumentException {
+        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
+        Set<String> setOfParameters = params.keySet();
+        validateParams(HOTEL_PARAMS, setOfParameters);
+
+        String sql = prepareStatement("SELECT * FROM hotels", setOfParameters);
+
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+        try {
+            CachedRowSet crs = QueryEngine.query(sql, setOfValues);
+            while (crs.next()) {
+                String hname = crs.getString("name");
+                Hashtable<String, String> tmp = roomParams;
+                tmp.put("hname", hname);
+
+                hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
+                        crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"), getRooms(tmp)));
+            }
+        } catch (SQLException err) {
+            System.err.println(err);
+        }
+
+        ArrayList<Hotel> noAvail = new ArrayList<Hotel>();
+        for (Hotel h : hotels) {
+            if (h.getRooms().size() == 0)
+                noAvail.add(h);
+        }
+
+        hotels.removeAll(noAvail);
+        return hotels;
     }
 
     /**
@@ -386,6 +444,58 @@ public class Logic {
     }
 
     /**
+     * Creates an ArrayList of hotels based on the current state of the database,
+     * the start and end date and the parameters provided by the argument. With
+     * rooms matching roomparams.
+     * 
+     * @param params     a Hashtable of parameter and value pairs to be added to the
+     *                   query
+     * @param roomParams a Hashtable of parameter and value pairs to be used to
+     *                   query rooms
+     * @param st         a long that represents the start date to be used (in
+     *                   milliseconds)
+     * @param e          a long that represents the end date to be used (in
+     *                   milliseconds)
+     * @return an ArrayList of Hotel objects that match the parameters
+     * @throws IllegalArgumentException
+     */
+    public ArrayList<Hotel> getHotels(Hashtable<String, String> params, Hashtable<String, String> roomParams, long st,
+            long e) throws IllegalArgumentException {
+        validateTimeframe(st, e);
+
+        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
+        Set<String> setOfParameters = params.keySet();
+        validateParams(HOTEL_PARAMS, setOfParameters);
+
+        String sql = prepareStatement("SELECT * FROM hotels", setOfParameters);
+
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+        try {
+            CachedRowSet crs = QueryEngine.query(sql, setOfValues);
+            while (crs.next()) {
+                String hname = crs.getString("name");
+                Hashtable<String, String> tmp = roomParams;
+                tmp.put("hname", hname);
+
+                hotels.add(new Hotel(hname, crs.getString("address"), crs.getString("image"), crs.getInt("region"),
+                        crs.getBoolean("accessibility"), crs.getBoolean("gym"), crs.getBoolean("spa"),
+                        getRooms(tmp, st, e)));
+            }
+        } catch (SQLException err) {
+            System.err.println(err);
+        }
+
+        ArrayList<Hotel> noAvail = new ArrayList<Hotel>();
+        for (Hotel h : hotels) {
+            if (h.getRooms().size() == 0)
+                noAvail.add(h);
+        }
+
+        hotels.removeAll(noAvail);
+        return hotels;
+    }
+
+    /**
      * Inserts a reservation based on the current state of the database and the
      * parameters provided by the argument.
      * 
@@ -401,7 +511,7 @@ public class Logic {
         validateTimeframe(Long.parseLong(params.get("startdate")), Long.parseLong(params.get("enddate")));
 
         String createDate = String.valueOf(new Date().getTime());
-        String reservationID = params.get("rnumber") + params.get("hname").replaceAll("\\s","")
+        String reservationID = params.get("rnumber") + params.get("hname").replaceAll("\\s", "")
                 + createDate.substring(createDate.length() - 6);
 
         setOfParameters.add("reservationID");
