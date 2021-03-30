@@ -18,8 +18,8 @@ import java.util.Set;
 public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
     private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
-    private final String[] RESERVATION_PARAMS = { "reservationID", "startdate", "enddate", "paid", "contact", "hname",
-            "rnumber" };
+    private final String[] RESERVATION_PARAMS = { "reservationID", "paid", "contact", "hname",
+            "rnumber", "cancelled" };
     private final String[] REVIEW_SELECT_PARAMS = { "hname", "grade" };
     private final String[] REVIEW_INSERT_PARAMS = { "grade", "hname", "rnumber", "text", "resID" };
 
@@ -132,7 +132,7 @@ public class Logic {
 
             res += sql + vals + ")";
         }
-
+        System.out.println(res);
         return res;
     }
 
@@ -185,7 +185,7 @@ public class Logic {
         try {
             CachedRowSet crs = QueryEngine.query(sql, setOfValues);
             while (crs.next()) {
-                reservations.add(new Reservation(crs.getString("reservationID"), crs.getLong("creationDate"),
+                reservations.add(new Reservation(crs.getString("reservationID"), crs.getLong("createDate"),
                         crs.getLong("startDate"), crs.getLong("endDate"), crs.getBoolean("cancelled"),
                         crs.getBoolean("paid"), crs.getString("contact"), crs.getString("hname"),
                         crs.getInt("rnumber")));
@@ -216,10 +216,11 @@ public class Logic {
         validateTimeframe(st, e);
 
         ArrayList<Reservation> res = getReservations(params);
+
         ArrayList<Reservation> intersects = new ArrayList<Reservation>();
 
         for (Reservation r : res) {
-            if ((r.getStart() > st && e > r.getStart()) || (r.getEnd() > st && e > r.getEnd()))
+            if ((r.getStart() >= st && e >= r.getStart()) || (r.getEnd() >= st && e >= r.getEnd()))
                 intersects.add(r);
         }
 
@@ -504,22 +505,26 @@ public class Logic {
      * @return the reservation ID for the reservation
      * @throws IllegalArgumentException
      */
-    public String setReservation(Hashtable<String, String> params) throws IllegalArgumentException {
-        ArrayList<String> setOfValues = new ArrayList<String>(params.values());
-        Set<String> setOfParameters = params.keySet();
+    public String setReservation(Hashtable<String, String> params, long st, long e) throws IllegalArgumentException {
+        Set<String> setOfParameters = new HashSet<String>();
+        setOfParameters.addAll(params.keySet());
+
         validateParams(RESERVATION_PARAMS, setOfParameters);
-        validateTimeframe(Long.parseLong(params.get("startdate")), Long.parseLong(params.get("enddate")));
+        validateTimeframe(st, e);
 
         String createDate = String.valueOf(new Date().getTime());
         String reservationID = params.get("rnumber") + params.get("hname").replaceAll("\\s", "")
                 + createDate.substring(createDate.length() - 6);
 
-        setOfParameters.add("reservationID");
-        setOfValues.add(reservationID);
-        setOfParameters.add("createdate");
-        setOfValues.add(createDate);
-        setOfParameters.add("cancelled");
-        setOfValues.add("0");
+        Hashtable<String, String> tmp = params;
+        tmp.put("reservationID", reservationID);
+        tmp.put("createdate", createDate);
+        tmp.put("startdate", String.valueOf(st));
+        tmp.put("enddate", String.valueOf(e));
+        tmp.put("cancelled", "0");
+
+        setOfParameters = tmp.keySet();
+        ArrayList<String> setOfValues = new ArrayList<String>(tmp.values());
 
         String sql = prepareStatement("INSERT INTO reservations(", setOfParameters);
         QueryEngine.update(sql, setOfValues);

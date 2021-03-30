@@ -28,7 +28,7 @@ CREATE TABLE RESERVATIONS (
     , StartDate BIGINT NOT NULL
     , EndDate BIGINT NOT NULL
     , Cancelled INT NOT NULL
-    , Paid INT NOT NULL
+    , Paid INT DEFAULT 0
     , Contact VARCHAR(30) NOT NULL
     , Hname VARCHAR(15) NOT NULL
     , Rnumber INT NOT NULL
