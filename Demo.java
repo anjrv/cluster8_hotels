@@ -377,6 +377,7 @@ public class Demo {
             System.out.println("What would you like to do?");
             System.out.println("1) Query");
             System.out.println("2) Update");
+            System.out.println("Type quit to stop.");
         }
     }
 
