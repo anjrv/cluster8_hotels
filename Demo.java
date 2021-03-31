@@ -76,7 +76,7 @@ public class Demo {
         return;
     }
 
-    private static void timeConstraints(Hashtable<String, String> params, Hashtable<String, String> roomParams) {
+    private static void queryTimeConstraints(Hashtable<String, String> params, Hashtable<String, String> roomParams) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
         long st = new Date().getTime();
         long e = new Date().getTime() + 31536000000L;
@@ -126,7 +126,7 @@ public class Demo {
         while (s.hasNext()) {
             String response = s.next().toLowerCase();
             if (response.equals("confirm")) {
-                timeConstraints(params, roomParams);
+                queryTimeConstraints(params, roomParams);
             } else if (response.equals("return")) {
                 break;
             } else if (!response.contains(",")) {
@@ -204,10 +204,13 @@ public class Demo {
             switch (response) {
             case "1":
                 hotels();
+                break;
             case "2":
                 reservations();
+                break;
             case "3":
                 reviews();
+                break;
             case "return":
                 cont = false;
                 break;
@@ -319,10 +322,13 @@ public class Demo {
             switch (response) {
             case "1":
                 addReservation();
+                break;
             case "2":
                 changeReservation();
+                break;
             case "3":
                 addReview();
+                break;
             case "return":
                 cont = false;
                 break;
@@ -348,6 +354,7 @@ public class Demo {
         System.out.println("What would you like to do?");
         System.out.println("1) Query");
         System.out.println("2) Update");
+        System.out.println("Type quit to stop.");
 
         while (s.hasNext()) {
             String response = s.next().toLowerCase();
@@ -355,8 +362,12 @@ public class Demo {
             switch (response) {
             case "1":
                 query();
+                break;
             case "2":
                 update();
+                break;
+            case "quit":
+                System.exit(0);
             default:
                 System.out.println("Invalid input");
                 break;
