@@ -1,7 +1,7 @@
 CREATE TABLE HOTELS (
-    Name VARCHAR(15) NOT NULL
+    Name VARCHAR(15) NOT NULL COLLATE NOCASE
     , Region INT NOT NULL
-    , Address VARCHAR(30)
+    , Address VARCHAR(30) COLLATE NOCASE
     , Image VARCHAR(10)
     , Accessibility INT
     , Gym INT
@@ -11,7 +11,7 @@ CREATE TABLE HOTELS (
 
 CREATE TABLE ROOMS (
     Rnumber INT NOT NULL
-    , Hname VARCHAR(15) NOT NULL
+    , Hname VARCHAR(15) NOT NULL COLLATE NOCASE
     , Price INT NOT NULL
     , Wifi INT 
     , Breakfast INT
@@ -27,10 +27,10 @@ CREATE TABLE RESERVATIONS (
     , CreateDate BIGINT NOT NULL
     , StartDate BIGINT NOT NULL
     , EndDate BIGINT NOT NULL
-    , Cancelled INT NOT NULL
+    , Cancelled INT DEFAULT 0
     , Paid INT DEFAULT 0
     , Contact VARCHAR(30) NOT NULL
-    , Hname VARCHAR(15) NOT NULL
+    , Hname VARCHAR(15) NOT NULL COLLATE NOCASE
     , Rnumber INT NOT NULL
     , PRIMARY KEY(ReservationID)
     , FOREIGN KEY(Hname,Rnumber) REFERENCES ROOMS(Hname,Rnumber)
@@ -38,7 +38,7 @@ CREATE TABLE RESERVATIONS (
 
 CREATE TABLE REVIEWS (
     Grade INT NOT NULL
-    , Hname VARCHAR(15) NOT NULL
+    , Hname VARCHAR(15) NOT NULL COLLATE NOCASE
     , Rnumber INT NOT NULL
     , Text VARCHAR(280)
     , ResID VARCHAR(20) NOT NULL

@@ -18,8 +18,7 @@ import java.util.Set;
 public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
     private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
-    private final String[] RESERVATION_PARAMS = { "reservationID", "paid", "contact", "hname",
-            "rnumber", "cancelled" };
+    private final String[] RESERVATION_PARAMS = { "reservationID", "paid", "contact", "hname", "rnumber", "cancelled" };
     private final String[] REVIEW_SELECT_PARAMS = { "hname", "grade" };
     private final String[] REVIEW_INSERT_PARAMS = { "grade", "hname", "rnumber", "text", "resID" };
 
@@ -292,7 +291,7 @@ public class Logic {
 
         for (Reservation rs : res) {
             for (Room rm : rms) {
-                if ((rm.getHname().equals(rs.getHname())) && rm.getRnumber() == rs.getRnumber())
+                if ((rm.getHname().toLowerCase().equals(rs.getHname().toLowerCase())) && rm.getRnumber() == rs.getRnumber())
                     reserved.add(rm);
             }
         }
@@ -520,7 +519,6 @@ public class Logic {
         tmp.put("createdate", createDate);
         tmp.put("startdate", String.valueOf(st));
         tmp.put("enddate", String.valueOf(e));
-        tmp.put("cancelled", "0");
 
         setOfParameters = tmp.keySet();
         ArrayList<String> setOfValues = new ArrayList<String>(tmp.values());
@@ -587,22 +585,20 @@ public class Logic {
      */
     public void updateReservationStart(String reservationID, long s) throws IllegalArgumentException {
         Reservation r = checkIfExists(reservationID);
-        if (r != null) {
-            validateTimeframe(s, r.getEnd());
+        validateTimeframe(s, r.getEnd());
 
-            ArrayList<String> setOfValues = new ArrayList<String>();
-            setOfValues.add(String.valueOf(s));
-            setOfValues.add(reservationID);
+        ArrayList<String> setOfValues = new ArrayList<String>();
+        setOfValues.add(String.valueOf(s));
+        setOfValues.add(reservationID);
 
-            QueryEngine.update("UPDATE reservations SET startdate = ? WHERE reservationID = ?", setOfValues);
+        QueryEngine.update("UPDATE reservations SET startdate = ? WHERE reservationID = ?", setOfValues);
 
-            String sub = "Changed start date for your reservation: " + reservationID;
-            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
-                    + " The start of your reservation has successfully been adjusted!" + System.lineSeparator()
-                    + "We hope you enjoy your stay," + System.lineSeparator() + "The Cluster 8 Hotels Team";
+        String sub = "Changed start date for your reservation: " + reservationID;
+        String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
+                + " The start of your reservation has successfully been adjusted!" + System.lineSeparator()
+                + "We hope you enjoy your stay," + System.lineSeparator() + "The Cluster 8 Hotels Team";
 
-            EmailEngine.send(r.getContact(), sub, msg);
-        }
+        EmailEngine.send(r.getContact(), sub, msg);
     }
 
     /**
@@ -615,22 +611,20 @@ public class Logic {
      */
     public void updateReservationEnd(String reservationID, long e) throws IllegalArgumentException {
         Reservation r = checkIfExists(reservationID);
-        if (r != null) {
-            validateTimeframe(r.getStart(), e);
+        validateTimeframe(r.getStart(), e);
 
-            ArrayList<String> setOfValues = new ArrayList<String>();
-            setOfValues.add(String.valueOf(e));
-            setOfValues.add(reservationID);
+        ArrayList<String> setOfValues = new ArrayList<String>();
+        setOfValues.add(String.valueOf(e));
+        setOfValues.add(reservationID);
 
-            QueryEngine.update("UPDATE reservations SET enddate = ? WHERE reservationID = ?", setOfValues);
+        QueryEngine.update("UPDATE reservations SET enddate = ? WHERE reservationID = ?", setOfValues);
 
-            String sub = "Changed end date for your reservation: " + reservationID;
-            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
-                    + " The end of your reservation has successfully been adjusted!" + System.lineSeparator()
-                    + "We hope you enjoy your stay," + System.lineSeparator() + "The Cluster 8 Hotels Team";
+        String sub = "Changed end date for your reservation: " + reservationID;
+        String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
+                + " The end of your reservation has successfully been adjusted!" + System.lineSeparator()
+                + "We hope you enjoy your stay," + System.lineSeparator() + "The Cluster 8 Hotels Team";
 
-            EmailEngine.send(r.getContact(), sub, msg);
-        }
+        EmailEngine.send(r.getContact(), sub, msg);
     }
 
     /**
@@ -641,19 +635,17 @@ public class Logic {
      */
     public void cancelReservation(String reservationID) throws IllegalArgumentException {
         Reservation r = checkIfExists(reservationID);
-        if (r != null) {
-            ArrayList<String> setOfValues = new ArrayList<String>();
-            setOfValues.add("1");
-            setOfValues.add(reservationID);
+        ArrayList<String> setOfValues = new ArrayList<String>();
+        setOfValues.add("1");
+        setOfValues.add(reservationID);
 
-            QueryEngine.update("UPDATE reservations SET cancelled = ? WHERE reservationID = ?", setOfValues);
+        QueryEngine.update("UPDATE reservations SET cancelled = ? WHERE reservationID = ?", setOfValues);
 
-            String sub = "Cancellation of your reservation: " + reservationID;
-            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
-                    + " Your reservation has been cancelled." + System.lineSeparator() + "Thank you for your patronage,"
-                    + System.lineSeparator() + "The Cluster 8 Hotels Team";
+        String sub = "Cancellation of your reservation: " + reservationID;
+        String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
+                + " Your reservation has been cancelled." + System.lineSeparator() + "Thank you for your patronage,"
+                + System.lineSeparator() + "The Cluster 8 Hotels Team";
 
-            EmailEngine.send(r.getContact(), sub, msg);
-        }
+        EmailEngine.send(r.getContact(), sub, msg);
     }
 }

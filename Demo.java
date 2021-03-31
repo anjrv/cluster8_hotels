@@ -31,7 +31,7 @@ public class Demo {
     private static void hotelInfo(Hotel h) {
         ArrayList<Room> rooms = h.getRooms();
 
-        System.out.println("------------------------------------------");
+        System.out.println();
         System.out.println("Additional information for: " + h.getName());
         System.out.println("Region: " + h.getRegion());
         System.out.println("Address: " + h.getAddress());
@@ -179,13 +179,15 @@ public class Demo {
     }
 
     private static void reservations() {
-        Hashtable<String, String> params = new Hashtable<String, String>();
+        // Hashtable<String, String> params = new Hashtable<String, String>();
 
+        // TODO
     }
 
     private static void reviews() {
-        Hashtable<String, String> params = new Hashtable<String, String>();
+        // Hashtable<String, String> params = new Hashtable<String, String>();
 
+        // TODO
     }
 
     private static void query() {
@@ -245,6 +247,7 @@ public class Demo {
             if (response.equals("confirm")) {
                 String resID = l.setReservation(params, st, e);
                 System.out.println("Success! Your reservation ID is: " + resID);
+                continue;
             } else if (response.equals("return")) {
                 break;
             } else {
@@ -300,11 +303,11 @@ public class Demo {
     }
 
     private static void changeReservation() {
-
+        // TODO
     }
 
     private static void addReview() {
-
+        // TODO
     }
 
     private static void update() {
