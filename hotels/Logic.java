@@ -132,7 +132,6 @@ public class Logic {
 
             res += sql + vals + ")";
         }
-        System.out.println(res);
         return res;
     }
 
