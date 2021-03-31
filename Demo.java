@@ -100,7 +100,8 @@ public class Demo {
                     e = sdf.parse(paramStrings[1]).getTime();
                     continue;
                 } catch (Exception err) {
-                    System.out.println("Input must be two dates, separated by a comma and in the form DD-MM-YYYY,DD-MM-YYYY");
+                    System.out.println(
+                            "Input must be two dates, separated by a comma and in the form DD-MM-YYYY,DD-MM-YYYY");
                 }
             }
 
@@ -133,8 +134,12 @@ public class Demo {
                 System.out.println("Input must be a key, value pair separated by a comma!");
             } else {
                 String[] paramStrings = response.split(",");
-                roomParams.put(paramStrings[0], paramStrings[1]);
-                continue;
+                if (paramStrings.length == 2) {
+                    roomParams.put(paramStrings[0], paramStrings[1]);
+                    continue;
+                }
+
+                System.out.println("Input format is incorrect.");
             }
 
             System.out.println();
@@ -165,8 +170,12 @@ public class Demo {
                 System.out.println("Input must be a key, value pair separated by a comma!");
             } else {
                 String[] paramStrings = response.split(",");
-                params.put(paramStrings[0], paramStrings[1]);
-                continue;
+                if (paramStrings.length == 2) {
+                    params.put(paramStrings[0], paramStrings[1]);
+                    continue;
+                }
+                
+                System.out.println("Input format is incorrect.");
             }
 
             System.out.println();
@@ -257,7 +266,8 @@ public class Demo {
                     e = sdf.parse(paramStrings[1]).getTime();
                     continue;
                 } catch (Exception err) {
-                    System.out.println("Input must be two dates, separated by a comma and in the form DD-MM-YYYY,DD-MM-YYYY");
+                    System.out.println(
+                            "Input must be two dates, separated by a comma and in the form DD-MM-YYYY,DD-MM-YYYY");
                 }
             }
 
@@ -288,8 +298,12 @@ public class Demo {
                 break;
             } else {
                 String[] paramStrings = response.split(",");
-                params.put(paramStrings[0], paramStrings[1]);
-                continue;
+                if (paramStrings.length == 2) {
+                    params.put(paramStrings[0], paramStrings[1]);
+                    continue;
+                }
+
+                System.out.println("Input format is incorrect.");
             }
 
             System.out.println();
