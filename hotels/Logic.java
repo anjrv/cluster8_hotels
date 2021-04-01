@@ -18,9 +18,9 @@ import java.util.Set;
 public class Logic {
     private final String[] HOTEL_PARAMS = { "name", "address", "region", "accessibility", "gym", "spa" };
     private final String[] ROOM_PARAMS = { "hname", "price", "beds", "adults", "children", "wifi", "breakfast" };
-    private final String[] RESERVATION_PARAMS = { "reservationID", "paid", "contact", "hname", "rnumber", "cancelled" };
+    private final String[] RESERVATION_PARAMS = { "reservationid", "paid", "contact", "hname", "rnumber", "cancelled" };
     private final String[] REVIEW_SELECT_PARAMS = { "hname", "grade" };
-    private final String[] REVIEW_INSERT_PARAMS = { "grade", "hname", "rnumber", "text", "resID" };
+    private final String[] REVIEW_INSERT_PARAMS = { "grade", "hname", "text", "reservationid" };
 
     /**
      * @return a comprehensive list of valid parameters to getHotels
@@ -148,9 +148,10 @@ public class Logic {
         Set<String> setOfParameters = params.keySet();
         validateParams(REVIEW_SELECT_PARAMS, setOfParameters);
 
-        String sql = prepareStatement("SELECT * FROM reviews", setOfParameters);
+        String sql = prepareStatement("SELECT grade, hname, text FROM reviews", setOfParameters);
 
         ArrayList<Review> reviews = new ArrayList<Review>();
+
         try {
             CachedRowSet crs = QueryEngine.query(sql, setOfValues);
             while (crs.next()) {
@@ -291,7 +292,8 @@ public class Logic {
 
         for (Reservation rs : res) {
             for (Room rm : rms) {
-                if ((rm.getHname().toLowerCase().equals(rs.getHname().toLowerCase())) && rm.getRnumber() == rs.getRnumber())
+                if ((rm.getHname().toLowerCase().equals(rs.getHname().toLowerCase()))
+                        && rm.getRnumber() == rs.getRnumber())
                     reserved.add(rm);
             }
         }
@@ -539,6 +541,27 @@ public class Logic {
     }
 
     /**
+     * Return the reservation if one exists, else throw error
+     * 
+     * @param reservationID the reservation ID to check for
+     * 
+     * @throws IllegalArgumentException
+     */
+    private Reservation checkIfExists(String reservationID) throws IllegalArgumentException {
+        Hashtable<String, String> tmp = new Hashtable<String, String>();
+        tmp.put("reservationID", reservationID);
+        tmp.put("cancelled", "0");
+
+        ArrayList<Reservation> res = getReservations(tmp);
+
+        if (res.size() < 1) {
+            throw new IllegalArgumentException("ReservationID is invalid");
+        }
+
+        return res.get(0);
+    }
+
+    /**
      * Inserts a review based on the current state of the database and the
      * parameters provided by the argument.
      * 
@@ -553,26 +576,6 @@ public class Logic {
 
         String sql = prepareStatement("INSERT INTO reviews(", setOfParameters);
         QueryEngine.update(sql, setOfValues);
-    }
-
-    /**
-     * Return the reservation if one exists, else throw error
-     * 
-     * @param reservationID the reservation ID to check for
-     * 
-     * @throws IllegalArgumentException
-     */
-    private Reservation checkIfExists(String reservationID) throws IllegalArgumentException {
-        Hashtable<String, String> tmp = new Hashtable<String, String>();
-        tmp.put("reservationID", reservationID);
-
-        ArrayList<Reservation> res = getReservations(tmp);
-
-        if (res.size() < 1) {
-            throw new IllegalArgumentException("ReservationID is invalid");
-        }
-
-        return res.get(0);
     }
 
     /**
@@ -635,6 +638,8 @@ public class Logic {
      */
     public void cancelReservation(String reservationID) throws IllegalArgumentException {
         Reservation r = checkIfExists(reservationID);
+        System.out.println(r.getResID());
+
         ArrayList<String> setOfValues = new ArrayList<String>();
         setOfValues.add("1");
         setOfValues.add(reservationID);
