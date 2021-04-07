@@ -82,7 +82,7 @@ public class Demo {
         long e = new Date().getTime() + 31536000000L;
 
         System.out.println();
-        System.out.println("Would you like to add a start and end date?");
+        System.out.println("Please add a start and end date.");
         System.out.println("Start date and end date should be written in the format DD-MM-YYYY,DD-MM-YYYY");
         System.out.println("Type confirm to proceed.");
         System.out.println("Type return to go back.");
@@ -114,12 +114,22 @@ public class Demo {
         return;
     }
 
+    private static void roomParams() {
+        String[] params = l.getRoomParams();
+
+        System.out.println("------------------------------------------");
+        for (int i = 0; i < params.length; i++) {
+            System.out.println(params[i]);
+        }
+    }
+
     private static void roomParams(Hashtable<String, String> params) {
         Hashtable<String, String> roomParams = new Hashtable<String, String>();
 
         System.out.println();
         System.out.println("Would you like to add room parameters?");
-        System.out.println("Type in key value pairs separated by a comma, example: price,20000");
+        System.out.println("Insert desired parameters as key value pairs separated by a comma.");
+        System.out.println("Type help to see available parameters.");
         System.out.println("Type confirm to proceed.");
         System.out.println("Type return to go back.");
 
@@ -129,6 +139,8 @@ public class Demo {
                 queryTimeConstraints(params, roomParams);
             } else if (response.equals("return")) {
                 break;
+            } else if (response.equals("help")) {
+                roomParams();
             } else if (!response.contains(",")) {
                 System.out.println("Input must be a key, value pair separated by a comma!");
             } else {
@@ -143,11 +155,21 @@ public class Demo {
 
             System.out.println();
             System.out.println("Would you like to add room parameters?");
-            System.out.println("Type in key value pairs separated by a comma, example: price,20000");
+            System.out.println("Insert desired parameters as key value pairs separated by a comma.");
+            System.out.println("Type help to see available parameters.");
             System.out.println("Type confirm to proceed.");
             System.out.println("Type return to go back.");
         }
         return;
+    }
+
+    private static void hotelParams() {
+        String[] params = l.getHotelParams();
+
+        System.out.println("------------------------------------------");
+        for (int i = 0; i < params.length; i++) {
+            System.out.println(params[i]);
+        }
     }
 
     private static void hotels() {
@@ -155,7 +177,8 @@ public class Demo {
 
         System.out.println();
         System.out.println("What hotel paramaters would you like to use?");
-        System.out.println("Type in key value pairs separated by a comma, example: region,0");
+        System.out.println("Insert desired parameters as key value pairs separated by a comma.");
+        System.out.println("Type help to see available parameters.");
         System.out.println("Type confirm to proceed.");
         System.out.println("Type return to go back.");
 
@@ -165,6 +188,8 @@ public class Demo {
                 roomParams(params);
             } else if (response.equals("return")) {
                 break;
+            } else if (response.equals("help")) {
+                hotelParams();
             } else if (!response.contains(",")) {
                 System.out.println("Input must be a key, value pair separated by a comma!");
             } else {
@@ -179,9 +204,11 @@ public class Demo {
 
             System.out.println();
             System.out.println("What hotel paramaters would you like to use?");
-            System.out.println("Type in key value pairs separated by a comma, example: region,0");
+            System.out.println("Insert desired parameters as key value pairs separated by a comma.");
+            System.out.println("Type help to see available parameters.");
             System.out.println("Type confirm to proceed.");
             System.out.println("Type return to go back.");
+
         }
         return;
     }
@@ -194,9 +221,19 @@ public class Demo {
 
         for (int i = 0; i < reservations.size(); i++) {
             System.out.println("------------------------------------------");
-            System.out.println("Hotel and room: " + reservations.get(i).getHname() + " " + reservations.get(i).getRnumber());
+            System.out.println(
+                    "Hotel and room: " + reservations.get(i).getHname() + " " + reservations.get(i).getRnumber());
             System.out.println("Start date: " + sdf.format(new Date(reservations.get(i).getStart())));
             System.out.println("End date: " + sdf.format(new Date(reservations.get(i).getEnd())));
+        }
+    }
+
+    private static void reservationParams() {
+        String[] params = l.getReservationParams();
+
+        System.out.println("------------------------------------------");
+        for (int i = 0; i < params.length; i++) {
+            System.out.println(params[i]);
         }
     }
 
@@ -205,6 +242,7 @@ public class Demo {
 
         System.out.println();
         System.out.println("What reservation paramaters would you like to use?");
+        System.out.println("Type help to see available parameters.");
         System.out.println("Type confirm to proceed.");
         System.out.println("Type return to go back.");
 
@@ -213,6 +251,8 @@ public class Demo {
             if (response.equals("confirm")) {
                 showReservations(params);
                 continue;
+            } else if (response.equals("help")) {
+                reservationParams();
             } else if (response.equals("return")) {
                 break;
             } else if (!response.contains(",")) {
@@ -249,20 +289,32 @@ public class Demo {
         }
     }
 
+    private static void reviewSelectParams() {
+        String[] params = l.getReviewSelectParams();
+
+        System.out.println("------------------------------------------");
+        for (int i = 0; i < params.length; i++) {
+            System.out.println(params[i]);
+        }
+    }
+
     private static void reviews() {
         Hashtable<String, String> params = new Hashtable<String, String>();
 
         System.out.println();
         System.out.println("What review paramaters would you like to use?");
+        System.out.println("Type help to see available parameters.");
         System.out.println("Type confirm to proceed.");
         System.out.println("Type return to go back.");
 
         while (s.hasNext()) {
-            String response = s.next().toLowerCase();
-            if (response.equals("confirm")) {
+            String response = s.next();
+            if (response.toLowerCase().equals("confirm")) {
                 showReviews(params);
                 continue;
-            } else if (response.equals("return")) {
+            } else if (response.toLowerCase().equals("help")) {
+                reviewSelectParams();
+            } else if (response.toLowerCase().equals("return")) {
                 break;
             } else if (!response.contains(",")) {
                 System.out.println("Input must be a key, value pair separated by a comma!");
@@ -371,15 +423,18 @@ public class Demo {
         System.out.println();
         System.out.println("Please enter the details of your desired reservation.");
         System.out.println("Required fields are: Hotel name, Room number, Contact email");
+        System.out.println("Type help to see the format of the parameters.");
         System.out.println("Type confirm to proceed.");
         System.out.println("Type return to go back.");
 
         while (s.hasNext()) {
-            String response = s.next().toLowerCase();
-            if (response.equals("confirm")) {
+            String response = s.next();
+            if (response.toLowerCase().equals("confirm")) {
                 reservationTimeConstraints(params);
-            } else if (response.equals("return")) {
+            } else if (response.toLowerCase().equals("return")) {
                 break;
+            } else if (response.toLowerCase().equals("help")) {
+                reservationParams();
             } else {
                 String[] paramStrings = response.split(",");
                 if (paramStrings.length == 2) {
@@ -401,7 +456,7 @@ public class Demo {
 
     private static void cancelReservation() {
         System.out.println();
-        System.out.println("Please enter reservation ID for the reservation you want to cancel.");
+        System.out.println("Please enter reservationID for the reservation you want to cancel.");
         System.out.println("Type confirm to proceed.");
         System.out.println("Type return to go back.");
         String resID = null;
@@ -540,23 +595,34 @@ public class Demo {
         return;
     }
 
+    private static void reviewInsertParams() {
+        String[] params = l.getReviewInsertParams();
+
+        System.out.println("------------------------------------------");
+        for (int i = 0; i < params.length; i++) {
+            System.out.println(params[i]);
+        }
+    }
+
     private static void addReview() {
         Hashtable<String, String> params = new Hashtable<String, String>();
 
         System.out.println();
         System.out.println("Please enter the details of your review.");
-        System.out.println("Required fields are: Grade, Hotel name, Review Text, Reservation ID");
+        System.out.println("Type help to see the required parameters.");
         System.out.println("Type confirm to proceed.");
         System.out.println("Type return to go back.");
 
         while (s.hasNext()) {
-            String response = s.next().toLowerCase();
-            if (response.equals("confirm")) {
+            String response = s.next();
+            if (response.toLowerCase().equals("confirm")) {
                 l.setReview(params);
                 System.out.println("Your review has been added.");
                 continue;
-            } else if (response.equals("return")) {
+            } else if (response.toLowerCase().equals("return")) {
                 break;
+            } else if (response.toLowerCase().equals("help")) {
+                reviewInsertParams();
             } else {
                 String[] paramStrings = response.split(",");
                 if (paramStrings.length == 2) {
@@ -569,7 +635,7 @@ public class Demo {
 
             System.out.println();
             System.out.println("Please enter the details of your review.");
-            System.out.println("Required fields are: Grade, Hotel name, Review Text, Reservation ID");
+            System.out.println("Type help to see the required parameters.");
             System.out.println("Type confirm to proceed.");
             System.out.println("Type return to go back.");
         }
