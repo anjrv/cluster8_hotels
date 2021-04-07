@@ -617,7 +617,7 @@ public class Demo {
     }
 
     private static void intro() {
-        s.useDelimiter("(\\n)");
+        s.useDelimiter(System.lineSeparator());
 
         System.out.println();
         System.out.println("What would you like to do?");
