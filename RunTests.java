@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.io.IOException;
 import java.io.File;
 
 import hotels.Logic;
@@ -18,24 +19,21 @@ import hotels.Setup;
  *         Steinn Stefánsson Thors
  */
 public class RunTests {
-    private Logic hotelLogic = new Logic();
+    private static Logic hotelLogic = new Logic();
 
     @BeforeClass
     public static void setup() {
-        // Preserve existing database if there is one
-        // Create dummy to test with
+        // If there is no database then create one
+        File db = new File("hotels/hotels.db");
 
-        File real = new File("hotels/hotels.db");
-
-        if (real.exists()) {
-            File save = new File("hotels/saved_hotels.db");
-            real.renameTo(save);
-        }
-
-        try {
-            Setup.setup();
-        } catch (Exception e) {
-            System.err.println("Problem with database setup: " + e);
+        if (!db.exists()) {
+            try {
+                if (!db.exists()) {
+                    Setup.setup();
+                }
+            } catch (Exception e) {
+                System.err.println("Problem with database initialization: " + e);
+            }
         }
     }
 
@@ -145,19 +143,5 @@ public class RunTests {
         hotelParams.put("Cheese", "Yes");
 
         ArrayList<Hotel> hotels = hotelLogic.getHotels(hotelParams);
-    }
-
-    @AfterClass
-    public static void cleanup() {
-        // Delete dummy
-        // Restore existing database if there was one
-
-        File fake = new File("hotels/hotels.db");
-        File real = new File("hotels/saved_hotels.db");
-
-        fake.delete();
-        if (real.exists()) {
-            real.renameTo(fake);
-        }
     }
 }

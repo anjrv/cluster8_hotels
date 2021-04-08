@@ -16,7 +16,7 @@
 Setup process will create the required database and populate it according to the information within the included schema.sql script.
 
 ### Test cases can be run:
-**It is possible to run test cases without running the Setup script implicitly, but the Setup script MUST be compiled.**
+**It is possible to run test cases without running the Setup script implicitly but then the Setup script must be compiled.**
 * Compile tests:
     - On Windows: `javac -cp ".;testing.jar;hoteldeps.jar" RunTests.java`
     - On UNIX/Mac: `javac -cp .:testing.jar:hoteldeps.jar RunTests.java`

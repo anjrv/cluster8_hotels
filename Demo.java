@@ -17,6 +17,43 @@ public class Demo {
     private static final Scanner s = new Scanner(System.in); // Scanner used for user input
     private static final Logic l = new Logic(); // Hotel business logic controller
 
+    /**
+     * Helper function that prints available parameter options to StdOut.
+     * 
+     * @param type String representing the parameters to get
+     */
+    private static void getParams(String type) {
+        String[] params = null;
+
+        switch (type) {
+        case "hotels":
+            params = l.getHotelParams();
+            break;
+        case "reservations":
+            params = l.getReservationParams();
+            break;
+        case "reviewInsert":
+            params = l.getReviewInsertParams();
+            break;
+        case "reviewSelect":
+            params = l.getReviewSelectParams();
+            break;
+        case "rooms":
+            params = l.getRoomParams();
+            break;
+        }
+
+        System.out.println("------------------------------------------");
+        for (int i = 0; i < params.length; i++) {
+            System.out.println(params[i]);
+        }
+    }
+
+    /**
+     * Helper function to print information about a given room to StdOut.
+     *
+     * @param r the room to print
+     */
     private static void roomInfo(Room r) {
         System.out.println("------------------------------------------");
         System.out.println("Room number: " + r.getRnumber());
@@ -28,6 +65,11 @@ public class Demo {
         System.out.println("Breakfast: " + (r.getBreakfast() ? "YES" : "NO"));
     }
 
+    /**
+     * Helper function to print information about a given hotel to StdOut.
+     *
+     * @param h the hotel to print
+     */
     private static void hotelInfo(Hotel h) {
         ArrayList<Room> rooms = h.getRooms();
 
@@ -44,6 +86,14 @@ public class Demo {
         }
     }
 
+    /**
+     * Fetches a list of Hotel objects and displays them in an accessible manner.
+     * 
+     * @param params     Hashtable of hotel parameters (can be empty)
+     * @param roomParams Hashtable of room parameters (can be empty)
+     * @param st         long representing start date
+     * @param e          long representing end date
+     */
     private static void showHotels(Hashtable<String, String> params, Hashtable<String, String> roomParams, long st,
             long e) {
         System.out.println();
@@ -76,6 +126,12 @@ public class Demo {
         return;
     }
 
+    /**
+     * Helper function to get start and end dates from user and convert them to ms.
+     * 
+     * @param params     Hashtable of hotel parameters (can be empty)
+     * @param roomParams Hashtable of room parameters (can be empty)
+     */
     private static void queryTimeConstraints(Hashtable<String, String> params, Hashtable<String, String> roomParams) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
         long st = new Date().getTime();
@@ -114,15 +170,11 @@ public class Demo {
         return;
     }
 
-    private static void roomParams() {
-        String[] params = l.getRoomParams();
-
-        System.out.println("------------------------------------------");
-        for (int i = 0; i < params.length; i++) {
-            System.out.println(params[i]);
-        }
-    }
-
+    /**
+     * Helper function to get room parameters from user (if any).
+     * 
+     * @param params Hashtable of hotel parameters (can be empty)
+     */
     private static void roomParams(Hashtable<String, String> params) {
         Hashtable<String, String> roomParams = new Hashtable<String, String>();
 
@@ -140,7 +192,8 @@ public class Demo {
             } else if (response.equals("return")) {
                 break;
             } else if (response.equals("help")) {
-                roomParams();
+                getParams("rooms");
+                continue;
             } else if (!response.contains(",")) {
                 System.out.println("Input must be a key, value pair separated by a comma!");
             } else {
@@ -163,15 +216,9 @@ public class Demo {
         return;
     }
 
-    private static void hotelParams() {
-        String[] params = l.getHotelParams();
-
-        System.out.println("------------------------------------------");
-        for (int i = 0; i < params.length; i++) {
-            System.out.println(params[i]);
-        }
-    }
-
+    /**
+     * Helper function to get hotel parameters from user (if any).
+     */
     private static void hotels() {
         Hashtable<String, String> params = new Hashtable<String, String>();
 
@@ -189,7 +236,8 @@ public class Demo {
             } else if (response.equals("return")) {
                 break;
             } else if (response.equals("help")) {
-                hotelParams();
+                getParams("hotels");
+                continue;
             } else if (!response.contains(",")) {
                 System.out.println("Input must be a key, value pair separated by a comma!");
             } else {
@@ -213,6 +261,12 @@ public class Demo {
         return;
     }
 
+    /**
+     * Fetches a list of reservation objects and displays them in an accessible
+     * manner.
+     * 
+     * @param params Hashtable of reservation parameters (can be empty)
+     */
     private static void showReservations(Hashtable<String, String> params) {
         System.out.println();
 
@@ -228,15 +282,9 @@ public class Demo {
         }
     }
 
-    private static void reservationParams() {
-        String[] params = l.getReservationParams();
-
-        System.out.println("------------------------------------------");
-        for (int i = 0; i < params.length; i++) {
-            System.out.println(params[i]);
-        }
-    }
-
+    /**
+     * Helper function to get reservation parameters from user (if any).
+     */
     private static void reservations() {
         Hashtable<String, String> params = new Hashtable<String, String>();
 
@@ -252,7 +300,8 @@ public class Demo {
                 showReservations(params);
                 continue;
             } else if (response.equals("help")) {
-                reservationParams();
+                getParams("reservations");
+                continue;
             } else if (response.equals("return")) {
                 break;
             } else if (!response.contains(",")) {
@@ -275,6 +324,11 @@ public class Demo {
         return;
     }
 
+    /**
+     * Helper function to print infromation about reviews to StdOut.
+     * 
+     * @param params the review parameters to use (if any)
+     */
     private static void showReviews(Hashtable<String, String> params) {
         System.out.println();
 
@@ -289,15 +343,9 @@ public class Demo {
         }
     }
 
-    private static void reviewSelectParams() {
-        String[] params = l.getReviewSelectParams();
-
-        System.out.println("------------------------------------------");
-        for (int i = 0; i < params.length; i++) {
-            System.out.println(params[i]);
-        }
-    }
-
+    /**
+     * Helper function to get review parameters from user (if any).
+     */
     private static void reviews() {
         Hashtable<String, String> params = new Hashtable<String, String>();
 
@@ -313,7 +361,8 @@ public class Demo {
                 showReviews(params);
                 continue;
             } else if (response.toLowerCase().equals("help")) {
-                reviewSelectParams();
+                getParams("reviewSelect");
+                continue;
             } else if (response.toLowerCase().equals("return")) {
                 break;
             } else if (!response.contains(",")) {
@@ -336,6 +385,9 @@ public class Demo {
         return;
     }
 
+    /**
+     * Provides query routing to the user.
+     */
     private static void query() {
         boolean cont = true;
 
@@ -377,6 +429,12 @@ public class Demo {
         return;
     }
 
+    /**
+     * Gets the start date and end date for a reservation and inserts it if it is
+     * valid.
+     * 
+     * @param params parameters to be used for the reservation
+     */
     private static void reservationTimeConstraints(Hashtable<String, String> params) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
         long st = new Date().getTime();
@@ -417,6 +475,10 @@ public class Demo {
         return;
     }
 
+    /**
+     * Helper function to get reservation parameters from user. (cannot be empty)
+     * Required parameters are: hname, rnumber, contact
+     */
     private static void addReservation() {
         Hashtable<String, String> params = new Hashtable<String, String>();
 
@@ -434,7 +496,8 @@ public class Demo {
             } else if (response.toLowerCase().equals("return")) {
                 break;
             } else if (response.toLowerCase().equals("help")) {
-                reservationParams();
+                getParams("reservations");
+                continue;
             } else {
                 String[] paramStrings = response.split(",");
                 if (paramStrings.length == 2) {
@@ -454,6 +517,9 @@ public class Demo {
         return;
     }
 
+    /**
+     * Gets a reservationID from the user and cancels that reservation if it exists.
+     */
     private static void cancelReservation() {
         System.out.println();
         System.out.println("Please enter reservationID for the reservation you want to cancel.");
@@ -488,6 +554,12 @@ public class Demo {
         return;
     }
 
+    /**
+     * Gets a date from the user from StdIn in the format DD-MM-YYYY and returns a
+     * long millisecond representation of it.
+     * 
+     * @return long the date in milliseconds
+     */
     private static long getDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
         long date = 0L;
@@ -514,6 +586,12 @@ public class Demo {
         return date;
     }
 
+    /**
+     * Updates the start or end of a reservation based on the reservationID from the user.
+     *
+     * @param which boolean toggle that represents whether we are updating the start
+     *              or end of a reservation
+     */
     private static void changeDate(boolean which) {
         System.out.println();
         System.out.println("Please enter reservation ID for the reservation you want to change.");
@@ -555,6 +633,9 @@ public class Demo {
         return;
     }
 
+    /**
+     * Reservation update routing.
+     */
     private static void changeReservation() {
         boolean cont = true;
         System.out.println();
@@ -595,15 +676,12 @@ public class Demo {
         return;
     }
 
-    private static void reviewInsertParams() {
-        String[] params = l.getReviewInsertParams();
-
-        System.out.println("------------------------------------------");
-        for (int i = 0; i < params.length; i++) {
-            System.out.println(params[i]);
-        }
-    }
-
+    /**
+     * Adds a review to the database based on given parameters.
+     * Required parameters are: grade, text, reservationID, hname
+     * 
+     * Review can only be given if user has an existing reservationID.
+     */
     private static void addReview() {
         Hashtable<String, String> params = new Hashtable<String, String>();
 
@@ -622,7 +700,8 @@ public class Demo {
             } else if (response.toLowerCase().equals("return")) {
                 break;
             } else if (response.toLowerCase().equals("help")) {
-                reviewInsertParams();
+                getParams("reviewInsert");
+                continue;
             } else {
                 String[] paramStrings = response.split(",");
                 if (paramStrings.length == 2) {
@@ -642,6 +721,9 @@ public class Demo {
         return;
     }
 
+    /**
+     * Database update routing.
+     */
     private static void update() {
         boolean cont = true;
         System.out.println();
@@ -682,6 +764,9 @@ public class Demo {
         return;
     }
 
+    /**
+     * Main menu routing.
+     */
     private static void intro() {
         s.useDelimiter(System.lineSeparator());
 
@@ -716,6 +801,7 @@ public class Demo {
         }
     }
 
+    // Show main menu route if program is called explicitly.
     public static void main(String[] args) {
         intro();
     }
