@@ -567,15 +567,26 @@ public class Logic {
      * 
      * @param params a hashtable of parameter and value pairs to be added to the
      *               query
+     * @return boolean confirmation whether the update worked
      * @throws IllegalArgumentException
      */
-    public void setReview(Hashtable<String, String> params) throws IllegalArgumentException {
+    public boolean setReview(Hashtable<String, String> params) throws IllegalArgumentException {
+        boolean res = false;
+
         ArrayList<String> setOfValues = new ArrayList<String>(params.values());
         Set<String> setOfParameters = params.keySet();
         validateParams(REVIEW_INSERT_PARAMS, setOfParameters);
 
         String sql = prepareStatement("INSERT INTO reviews(", setOfParameters);
-        QueryEngine.update(sql, setOfValues);
+
+        try {
+            QueryEngine.update(sql, setOfValues);
+            res = true;
+        } catch (Exception e) {
+            // Let function return false
+        }
+
+        return res;
     }
 
     /**
@@ -584,9 +595,12 @@ public class Logic {
      * @param reservationID the ID of the reservation to update
      * @param s             the date to be used as the new start date (in
      *                      milliseconds)
+     * @return boolean confirmation whether the update worked
      * @throws IllegalArgumentException
      */
-    public void updateReservationStart(String reservationID, long s) throws IllegalArgumentException {
+    public boolean updateReservationStart(String reservationID, long s) throws IllegalArgumentException {
+        boolean res = false;
+
         Reservation r = checkIfExists(reservationID);
         validateTimeframe(s, r.getEnd());
 
@@ -594,14 +608,20 @@ public class Logic {
         setOfValues.add(String.valueOf(s));
         setOfValues.add(reservationID);
 
-        QueryEngine.update("UPDATE reservations SET startdate = ? WHERE reservationID = ?", setOfValues);
-
         String sub = "Changed start date for your reservation: " + reservationID;
         String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
                 + " The start of your reservation has successfully been adjusted!" + System.lineSeparator()
                 + "We hope you enjoy your stay," + System.lineSeparator() + "The Cluster 8 Hotels Team";
 
-        EmailEngine.send(r.getContact(), sub, msg);
+        try {
+           QueryEngine.update("UPDATE reservations SET startdate = ? WHERE reservationID = ?", setOfValues);
+           res = true;
+           EmailEngine.send(r.getContact(), sub, msg);
+        } catch (Exception e) {
+            // Let function return false
+        }
+        
+        return res;
     }
 
     /**
@@ -610,9 +630,12 @@ public class Logic {
      * @param reservationID the ID of the reservation to update
      * @param e             the date to be used as the new end date (in
      *                      milliseconds)
+     * @return boolean confirmation whether the update worked
      * @throws IllegalArgumentException
      */
-    public void updateReservationEnd(String reservationID, long e) throws IllegalArgumentException {
+    public boolean updateReservationEnd(String reservationID, long e) throws IllegalArgumentException {
+        boolean res = false;
+
         Reservation r = checkIfExists(reservationID);
         validateTimeframe(r.getStart(), e);
 
@@ -620,37 +643,51 @@ public class Logic {
         setOfValues.add(String.valueOf(e));
         setOfValues.add(reservationID);
 
-        QueryEngine.update("UPDATE reservations SET enddate = ? WHERE reservationID = ?", setOfValues);
-
         String sub = "Changed end date for your reservation: " + reservationID;
         String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
                 + " The end of your reservation has successfully been adjusted!" + System.lineSeparator()
                 + "We hope you enjoy your stay," + System.lineSeparator() + "The Cluster 8 Hotels Team";
 
-        EmailEngine.send(r.getContact(), sub, msg);
+        try {
+            QueryEngine.update("UPDATE reservations SET enddate = ? WHERE reservationID = ?", setOfValues);
+            res = true;
+            EmailEngine.send(r.getContact(), sub, msg);
+        } catch (Exception err) {
+            // Let function return false
+        }
+
+        return res;
     }
 
     /**
      * Cancel the reservation, if one exists
      * 
      * @param reservationID the ID of the reservation to update
+     * @return boolean confirmation whether the update worked
      * @throws IllegalArgumentException
      */
-    public void cancelReservation(String reservationID) throws IllegalArgumentException {
+    public boolean cancelReservation(String reservationID) throws IllegalArgumentException {
+        boolean res = false;
+
         Reservation r = checkIfExists(reservationID);
-        System.out.println(r.getResID());
 
         ArrayList<String> setOfValues = new ArrayList<String>();
         setOfValues.add("1");
         setOfValues.add(reservationID);
-
-        QueryEngine.update("UPDATE reservations SET cancelled = ? WHERE reservationID = ?", setOfValues);
 
         String sub = "Cancellation of your reservation: " + reservationID;
         String msg = "Hello!" + System.lineSeparator() + System.lineSeparator()
                 + " Your reservation has been cancelled." + System.lineSeparator() + "Thank you for your patronage,"
                 + System.lineSeparator() + "The Cluster 8 Hotels Team";
 
-        EmailEngine.send(r.getContact(), sub, msg);
+        try {
+            QueryEngine.update("UPDATE reservations SET cancelled = ? WHERE reservationID = ?", setOfValues);
+            res = true;
+            EmailEngine.send(r.getContact(), sub, msg);
+        } catch (Exception err) {
+            // Let function return false
+        }
+
+        return res;
     }
 }
