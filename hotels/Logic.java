@@ -106,6 +106,8 @@ public class Logic {
                 for (String key : setOfParameters) {
                     if (key.toLowerCase().equals("price")) {
                         sql += key + " <= ? ";
+                    } else if (key.toLowerCase().equals("beds") || key.toLowerCase().equals("adults") || key.toLowerCase().equals("children")) {
+                        sql += key + " >= ? ";
                     } else {
                         sql += key + " = ? ";
                     }
