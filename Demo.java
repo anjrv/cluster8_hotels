@@ -531,9 +531,13 @@ public class Demo {
             String response = s.next();
             if (response.toLowerCase().equals("confirm")) {
                 if (resID != null) {
-                    System.out.println(resID);
                     try {
-                        l.cancelReservation(resID);
+                        boolean attempt = l.cancelReservation(resID);
+                        if(attempt) {
+                            System.out.println("Reservation has been successfully cancelled.");
+                        } else {
+                            System.out.println("Could not successfully cancel reservation.");
+                        }
                     } catch (Exception e) {
                         System.out.println("Reservation ID is invalid.");
                     }
@@ -606,11 +610,19 @@ public class Demo {
                 newDate = getDate();
                 if (newDate != 0L) {
                     try {
+                        boolean attempt = false;
                         if (which) {
-                            l.updateReservationStart(resID, newDate);
+                            attempt = l.updateReservationStart(resID, newDate);
                         } else {
-                            l.updateReservationEnd(resID, newDate);
+                            attempt = l.updateReservationEnd(resID, newDate);
                         }
+
+                        if(attempt) {
+                            System.out.println("Reservation has been successfully updated.");
+                        } else {
+                            System.out.println("Could not update your reservation.");
+                        }
+
                         continue;
                     } catch (Exception err) {
                         System.out.println(err);
@@ -694,8 +706,12 @@ public class Demo {
         while (s.hasNext()) {
             String response = s.next();
             if (response.toLowerCase().equals("confirm")) {
-                l.setReview(params);
-                System.out.println("Your review has been added.");
+                boolean attempt = l.setReview(params);
+                if (attempt) {
+                    System.out.println("Your review has been added.");
+                } else {
+                    System.out.println("Could not add your review.");
+                }
                 continue;
             } else if (response.toLowerCase().equals("return")) {
                 break;
