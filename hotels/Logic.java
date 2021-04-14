@@ -508,6 +508,7 @@ public class Logic {
      * @throws IllegalArgumentException
      */
     public String setReservation(Hashtable<String, String> params, long st, long e) throws IllegalArgumentException {
+        String response = "";
         Set<String> setOfParameters = new HashSet<String>();
         setOfParameters.addAll(params.keySet());
 
@@ -528,18 +529,24 @@ public class Logic {
         ArrayList<String> setOfValues = new ArrayList<String>(tmp.values());
 
         String sql = prepareStatement("INSERT INTO reservations(", setOfParameters);
-        QueryEngine.update(sql, setOfValues);
+        try {
+            QueryEngine.update(sql, setOfValues);
 
-        String sub = "Confirmation for your booking at " + params.get("hname");
-        String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + "Thank you for booking with "
+            String sub = "Confirmation for your booking at " + params.get("hname");
+            String msg = "Hello!" + System.lineSeparator() + System.lineSeparator() + "Thank you for booking with "
                 + params.get("hname") + System.lineSeparator() + "Your reservation ID is: " + reservationID
                 + ". This unique ID can be used to change your booking or cancel if needed!" + System.lineSeparator()
                 + System.lineSeparator() + "We hope you enjoy your stay," + System.lineSeparator()
                 + "The Cluster 8 Hotels Team";
 
-        EmailEngine.send(params.get("contact"), sub, msg);
+            EmailEngine.send(params.get("contact"), sub, msg);
 
-        return reservationID;
+            response += reservationID;
+        } catch (Exception err) {
+            // Return empty string    
+        }
+
+        return response;
     }
 
     /**
@@ -584,7 +591,7 @@ public class Logic {
         try {
             QueryEngine.update(sql, setOfValues);
             res = true;
-        } catch (Exception e) {
+        } catch (Exception err) {
             // Let function return false
         }
 
@@ -619,7 +626,7 @@ public class Logic {
            QueryEngine.update("UPDATE reservations SET startdate = ? WHERE reservationID = ?", setOfValues);
            res = true;
            EmailEngine.send(r.getContact(), sub, msg);
-        } catch (Exception e) {
+        } catch (Exception err) {
             // Let function return false
         }
         

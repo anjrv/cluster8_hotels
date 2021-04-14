@@ -104,23 +104,20 @@ class QueryEngine {
      * 
      * @param sql  SQL query string to be executed
      * @param vals values to be inserted into the given query
+     * @throws Exception
      */
-    static void update(String sql, ArrayList<String> vals) {
+    static void update(String sql, ArrayList<String> vals) throws Exception {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        try {
-            connection = connect();
-            statement = connection.prepareStatement(sql);
-            for (int i = 0; i < vals.size(); i++) {
-                statement.setString(i + 1, vals.get(i));
-            }
-            statement.executeUpdate();
+        connection = connect();
+        statement = connection.prepareStatement(sql);
 
-        } catch (Exception err) {
-            System.err.println(err);
-        } finally {
-            close(connection, statement);
+        for (int i = 0; i < vals.size(); i++) {
+            statement.setString(i + 1, vals.get(i));
         }
+
+        statement.executeUpdate();
+        close(connection, statement);
     }
 }
