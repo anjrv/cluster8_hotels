@@ -47,7 +47,6 @@ class QueryEngine {
      * 
      * @param c currently open Connection object
      * @param s currently open Statement object
-     * @param r currently open ResultSet object
      */
     private static void close(Connection c, Statement s) {
         try {
@@ -96,6 +95,7 @@ class QueryEngine {
                 /* Ignored */ }
             close(connection, statement);
         }
+
         return res;
     }
 
