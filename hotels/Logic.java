@@ -266,6 +266,21 @@ public class Logic {
     }
 
     /**
+     * Creates an ArrayList of rooms based on the current state of the database.
+     * 
+     * @return an ArrayList of Room objects
+     * @throws IllegalArgumentException
+     */
+    public ArrayList<Room> getRooms() throws IllegalArgumentException {
+        Hashtable<String, String> tmp = new Hashtable<String, String>();
+        ArrayList<Room> rooms = new ArrayList<Room>();
+
+        rooms = getRooms(tmp);
+        return rooms;
+    }
+
+
+    /**
      * Creates an ArrayList of rooms based on the current state of the database, the
      * start and end date and the parameters provided by the argument.
      * 
@@ -306,6 +321,25 @@ public class Logic {
     }
 
     /**
+     * Creates an ArrayList of rooms based on the current state of the database,
+     * the start and end date and the parameters provided by the argument. 
+     * 
+     * @param st         a long that represents the start date to be used (in
+     *                   milliseconds)
+     * @param e          a long that represents the end date to be used (in
+     *                   milliseconds)
+     * @return an ArrayList of Room objects that match the parameters
+     * @throws IllegalArgumentException
+     */
+    public ArrayList<Room> getRooms(long st, long e) throws IllegalArgumentException {
+        Hashtable<String, String> tmp = new Hashtable<String, String>();
+        ArrayList<Room> rooms = new ArrayList<Room>();
+
+        rooms = getRooms(tmp, st, e);
+        return rooms;
+    }
+
+    /**
      * Creates an ArrayList of hotels based on the current state of the database and
      * the parameters provided by the argument.
      * 
@@ -342,7 +376,7 @@ public class Logic {
     /**
      * Creates an ArrayList of hotels based on the current state of the database.
      * 
-     * @return an ArrayList of Hotel objects that match the parameters
+     * @return an ArrayList of Hotel objects
      * @throws IllegalArgumentException
      */
     public ArrayList<Hotel> getHotels() throws IllegalArgumentException {
@@ -443,6 +477,25 @@ public class Logic {
         }
 
         hotels.removeAll(noAvail);
+        return hotels;
+    }
+
+    /**
+     * Creates an ArrayList of hotels based on the current state of the database,
+     * the start and end date and the parameters provided by the argument. 
+     * 
+     * @param st         a long that represents the start date to be used (in
+     *                   milliseconds)
+     * @param e          a long that represents the end date to be used (in
+     *                   milliseconds)
+     * @return an ArrayList of Hotel objects that match the parameters
+     * @throws IllegalArgumentException
+     */
+    public ArrayList<Hotel> getHotels(long st, long e) throws IllegalArgumentException {
+        Hashtable<String, String> tmp = new Hashtable<String, String>();
+        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
+
+        hotels = getHotels(tmp, st, e);
         return hotels;
     }
 
