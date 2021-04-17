@@ -279,6 +279,9 @@ public class Demo {
                     "Hotel and room: " + reservations.get(i).getHname() + " " + reservations.get(i).getRnumber());
             System.out.println("Start date: " + sdf.format(new Date(reservations.get(i).getStart())));
             System.out.println("End date: " + sdf.format(new Date(reservations.get(i).getEnd())));
+            if(reservations.get(i).getCancel()) {
+                System.out.println("CANCELLED");
+            }
         }
     }
 
