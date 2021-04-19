@@ -6,7 +6,7 @@ package hotels;
  * @author: Einar Jónsson, Eydís Sylvía Einarsdóttir, Jaan Jaerving, Snorri
  *          Steinn Stefánsson Thors
  */
-public class Reservation {
+public class Reservation implements Comparable<Reservation> {
     private String reservationID;
     private long creationDate;
     private long startDate;
@@ -113,5 +113,9 @@ public class Reservation {
      */
     public int getRnumber() {
         return rnumber;
+    }
+
+    public int compareTo(Reservation r) {
+        return this.getEnd() > r.getEnd() ? 1 : r.getEnd() > this.getEnd() ? -1 : 0;
     }
 }
